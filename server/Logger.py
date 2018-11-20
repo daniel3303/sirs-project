@@ -10,17 +10,23 @@ class Colors:
 
 class AbstractLogger:
     def __init__(self):
+        pass
 
+    def warning(self, message):
+        pass
 
-    def logWarning(self, message):
+    def error(self, message):
+        pass
 
-    def logError(self, message):
-
-    def logInfo(self, message):
-
+    def info(self, message):
+        pass
 
 class ConsoleLogger(AbstractLogger):
     def __init__(self):
+        pass
 
-    def logWarning(self, message):
-        print(Colors.WARNING + str(message) + Colors.ENDC)
+    def warning(self, message):
+        print(Colors.WARNING + "[WARNING] " + str(message) + Colors.ENDC)
+
+    def info(self, message):
+        print(Colors.OKGREEN + "[INFO] " + str(message) + Colors.ENDC)
