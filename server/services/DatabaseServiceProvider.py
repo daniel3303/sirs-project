@@ -14,3 +14,6 @@ class DatabaseServiceProvider(ServiceProvider):
         # Receives the event after all services process it
         event = self.eventDispatcher.fireBeforeUserCreatedEvent(event)
         self.driver.createUser(event.getUsername(), event.getPassword())
+
+    def getAllUsers(self):
+        return self.driver.getAllUsers()

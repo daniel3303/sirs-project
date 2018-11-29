@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 from database.SQLiteDatabase import SQLiteDatabase
+from Kernel import Kernel
 
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
@@ -17,7 +18,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(data.encode())
 
     def do_GET(self):
-        db = SQLiteDatabase()
+        db = Kernel.getService("DatabaseServiceProvider")
         message = str(db.getAllUsers())
         self.sendResponse(message)
 

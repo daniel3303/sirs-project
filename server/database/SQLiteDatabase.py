@@ -27,8 +27,6 @@ class SQLiteDatabase(DatabaseInterface):
             self.replicas[index]["connection"] =  sqlite3.connect(newReplica["db_name"])
             self.checkSchema(newReplica["connection"])
 
-        self.createUser("Daniel", 123456)
-
 
 
 
