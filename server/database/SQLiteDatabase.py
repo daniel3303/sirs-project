@@ -71,3 +71,8 @@ class SQLiteDatabase(DatabaseInterface):
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         self.logger.info("Created user "+username)
         return True
+
+    def getAllUsers(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM users")
+        return cursor.fetchall()
