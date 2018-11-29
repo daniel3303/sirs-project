@@ -8,3 +8,7 @@ Requer Python 3
 
 ** Notas **
 O sqlite3 insere apenas na base de dados principal, falta implementar replicação
+
+
+** Depencencies **
+bcrypt - pip install bcrypt

@@ -14,5 +14,7 @@ class Application:
         self.server = Server(Application.config["host"], Application.config["port"], Application.config["secureMode"])
         self.databaseServiceProvider = Kernel.getService("DatabaseServiceProvider")
 
+        self.databaseServiceProvider.createUser("João", "123456")
+
     def start(self):
         self.server.start()

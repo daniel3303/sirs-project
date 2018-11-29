@@ -9,9 +9,11 @@ class EventDispatcher:
         pass
 
     # Available events
-    def fireBeforeUserCreatedEvent(self, username):
-        for observer in Events.beforeUserCreatedEventObservers():
+    def fireBeforeUserCreatedEvent(self, event):
+        for observer in Events.getBeforeUserCreatedEventObservers():
             if isinstance(observer, BeforeUserCreatedObserver) == False:
                 EventDispatcher.logger.warning("Observer is not instance of BeforeUserCreatedObserver. Aborting...")
                 exit()
-            observer.onBeforeUserCreated(username)
+            observer.onBeforeUserCreated(event)
+
+        return event

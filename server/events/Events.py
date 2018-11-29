@@ -8,4 +8,4 @@ class Events:
 
     @staticmethod
     def listenToBeforeUserCreated(observer):
-        Events.userBeforeCreatedEventObservers(observer)
+        Events.userBeforeCreatedEventObservers.append(observer)

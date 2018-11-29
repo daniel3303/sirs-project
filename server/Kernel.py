@@ -7,6 +7,8 @@ class Kernel:
     # Register service providers here
     services = [
         "DatabaseServiceProvider",
+        "EncryptUserPasswordServiceProvider",
+        "EventLoggerServiceProvider",
     ]
 
     # Service instances
