@@ -28,9 +28,8 @@ class ConsoleLogger(AbstractLogger):
     def error(self, message):
         print(Colors.FAIL + "[ERROR] " + str(message) + Colors.ENDC)
 
-
     def warning(self, message):
         print(Colors.WARNING + "[WARNING] " + str(message) + Colors.ENDC)
 
     def info(self, message):
-        print(Colors.OKGREEN + "[INFO] " + str(message) + Colors.ENDC)
+        print(Colors.OKBLUE + "[INFO] " + str(message) + Colors.ENDC)

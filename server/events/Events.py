@@ -1,11 +1,11 @@
 class Events:
     #events
-    userCreatedEventObservers = []
+    userBeforeCreatedEventObservers = []
 
     @staticmethod
-    def getUserCreatedEventObservers():
-        return Events.userCreatedEventObservers
+    def getBeforeUserCreatedEventObservers():
+        return Events.userBeforeCreatedEventObservers
 
     @staticmethod
-    def listenToUserCreated(observer):
-        Events.userCreatedEventObservers(observer)
+    def listenToBeforeUserCreated(observer):
+        Events.userBeforeCreatedEventObservers(observer)

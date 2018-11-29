@@ -1,5 +1,5 @@
 from events.Events import Events
-from events.UserCreatedObserver import Events
+from events.BeforeUserCreatedObserver import BeforeUserCreatedObserver
 from Logger import ConsoleLogger
 
 class EventDispatcher:
@@ -9,8 +9,9 @@ class EventDispatcher:
         pass
 
     # Available events
-    def fireUserCreatedEvent(self, username):
-        for observer in Events.userCreatedEventObservers():
-            if isinstance(observer, UserCreatedObserver) == False:
-                EventDispatcher.logger.warning("Observer is not instance of UserCreatedObserver. Aborting...")
+    def fireBeforeUserCreatedEvent(self, username):
+        for observer in Events.beforeUserCreatedEventObservers():
+            if isinstance(observer, BeforeUserCreatedObserver) == False:
+                EventDispatcher.logger.warning("Observer is not instance of BeforeUserCreatedObserver. Aborting...")
                 exit()
+            observer.onBeforeUserCreated(username)
