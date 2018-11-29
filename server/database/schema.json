@@ -1,0 +1,12 @@
+[
+    {
+        "id" : "create_migrations_table",
+        "up" : "CREATE TABLE 'migrations' ('id' INT(11) NOT NULL, 'name' VARCHAR(1024) NOT NULL, CONSTRAINT 'unique_name' UNIQUE ('name'), PRIMARY KEY ('id') );",
+        "down" : "DROP TABLE IF EXISTS migrations"
+    },
+    {
+        "id" : "create_users_table",
+        "up" : "CREATE TABLE 'users' ('id' INT(11) NOT NULL, 'username' VARCHAR(255) NOT NULL, 'password' VARCHAR(1024) NOT NULL, CONSTRAINT 'unique_username' UNIQUE ('username'), PRIMARY KEY ('id'));",
+        "down" : "DROP TABLE IF EXISTS users"
+    }
+]

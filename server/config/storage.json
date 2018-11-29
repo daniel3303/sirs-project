@@ -1,0 +1,30 @@
+{
+    "db_name" : "test_database.db",
+    "replicas" : [
+        {
+            "name" : "US Server",
+            "db_name" : "replicas/us/us_database.db"
+        },{
+            "name" : "UK Server",
+            "db_name" : "replicas/uk/uk_database.db"
+        },{
+            "name" : "PT Server",
+            "db_name" : "replicas/pt/pt_database.db"
+        },{
+            "name" : "GE Server",
+            "db_name" : "replicas/ge/ge_database.db"
+        },{
+            "name" : "BZ Server",
+            "db_name" : "replicas/bz/bz_database.db"
+        },{
+            "name" : "AU Server",
+            "db_name" : "replicas/au/au_database.db"
+        },{
+            "name" : "JP Server",
+            "db_name" : "replicas/jp/jp_database.db"
+        },{
+            "name" : "AR Server",
+            "db_name" : "replicas/ar/ar_database.db"
+        }
+    ]
+}
