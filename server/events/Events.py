@@ -5,3 +5,7 @@ class Events:
     @staticmethod
     def getUserCreatedEventObservers():
         return Events.userCreatedEventObservers
+
+    @staticmethod
+    def listenToUserCreated(observer):
+        Events.userCreatedEventObservers(observer)
