@@ -1,5 +1,5 @@
 import json
-from providers.DatabaseServiceProvider import DatabaseServiceProvider
+from services.DatabaseServiceProvider import DatabaseServiceProvider
 from Server import Server
 
 class Application:
