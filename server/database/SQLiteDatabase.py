@@ -27,6 +27,8 @@ class SQLiteDatabase(DatabaseInterface):
             self.replicas[index]["connection"] =  sqlite3.connect(newReplica["db_name"])
             self.checkSchema(newReplica["connection"])
 
+        self.createUser("Daniel", 123456)
+
 
 
 
@@ -62,3 +64,10 @@ class SQLiteDatabase(DatabaseInterface):
         cursor = connection.cursor()
         cursor.execute("PRAGMA database_list;")
         return cursor.fetchone()[2]
+
+    #DATA INSERTION METHODS
+    def createUser(self, username, password):
+        cursor = self.connection.cursor()
+        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+        self.logger.info("Created user "+username)
+        return True
