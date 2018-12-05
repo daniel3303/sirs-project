@@ -8,6 +8,9 @@ class File(models.Model):
     # The owner of the file
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
 
+    # The file's content
+    content = models.TextField(default="")
+
     def getId(self):
         return self.id
 
