@@ -11,6 +11,7 @@ from server.models import File
 
 class FileView(View):
     def get(self, request, id=0):
+        # Check user authentication
         username = request.GET.get("username", "")
         password = request.GET.get("password", "")
         user = authenticate(username=username, password=password)
@@ -42,24 +43,20 @@ class FileView(View):
         bodyUnicode = request.body.decode('utf-8')
         jsonRequestData = json.loads(bodyUnicode)
 
-        fileName = jsonRequestData["name"]
+        # Check user authentication
         username = jsonRequestData["username"]
         password =jsonRequestData["password"]
-
-        print(jsonRequestData)
-        # Check user authentication
         user = authenticate(username=username, password=password)
         if(user is None):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
 
-
-        file = File()
-        file.setName(fileName)
-        file.setOwner(user)
+        content = jsonRequestData["content"]
+        file = user.files.get(id=id)
+        file.setContent(content)
 
         try:
             file.save()
         except:
-            return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao criar o ficheiro."})
+            return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao atualizar o ficheiro."})
 
         return JsonResponse({'status' : "success"})
