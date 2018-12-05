@@ -1,4 +1,5 @@
 from server.models.User import User
+from django.contrib.auth.hashers import *
 
 class UserAuthentication:
     def authenticate(self, request, username=None, password=None):
@@ -6,9 +7,13 @@ class UserAuthentication:
         print("Auth user: "+username+" password: "+password)
 
         try:
-            user = User.objects.get(username=username, password=password)
-            print("auth success")
-            return user
+            user = User.objects.get(username=username)
+            if(check_password(password, user.getPassword()) == True):
+                print("auth success")
+                return user
+            else:
+                print("auth failed")
+                return None
         except User.DoesNotExist:
             print("auth failed")
             return None
