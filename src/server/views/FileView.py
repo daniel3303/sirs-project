@@ -26,6 +26,7 @@ class FileView(View):
                 "file" : {
                     "id" : file.getId(),
                     "name" : file.getName(),
+                    "content" : file.getContent(),
                 }
             })
         except File.DoesNotExist:

@@ -26,3 +26,9 @@ class File(models.Model):
 
     def setOwner(self, newOwner):
         self.owner = newOwner
+
+    def getContent(self):
+        return self.content
+
+    def setContent(self, newContent):
+        self.content = newContent
