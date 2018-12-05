@@ -10,9 +10,10 @@ class UserCreateView(View):
     def get(self, request):
         return HttpResponse("Method not allowed. Use POST")
 
-    def post(self, request)
+    def post(self, request):
         username = request.POST["username"]
         password = request.POST["password"]
         name = request.POST["name"]
 
         user = User()
+        return None;

@@ -13,3 +13,21 @@ class Role(models.Model):
     # The permissions
     read = models.BooleanField(default=False)
     write = models.BooleanField(default=False)
+
+    def getOwner(self):
+        return self.owner
+
+    def getFile(self):
+        return self.file
+
+    def canRead(self):
+        return self.read
+
+    def canWrite(self):
+        return self.write
+
+    def setReadPermission(self, booleanValue):
+        self.read = booleanValue
+
+    def setWritePermission(self, booleanValue):
+        self.write = booleanValue
