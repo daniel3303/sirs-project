@@ -45,15 +45,23 @@ class FileView(View):
 
         # Check user authentication
         username = jsonRequestData["username"]
-        password =jsonRequestData["password"]
+        password = jsonRequestData["password"]
+
         user = authenticate(username=username, password=password)
         if(user is None):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
 
-        content = jsonRequestData["content"]
-        file = user.files.get(id=id)
-        file.setContent(content)
 
+        file = user.files.get(id=id)
+
+        content = jsonRequestData.get("content", None)
+        if content is not None:
+            file.setContent(content)
+
+        name = jsonRequestData.get("name", None)
+        if name is not None:
+            file.setName(name)
+            
         try:
             file.save()
         except:
