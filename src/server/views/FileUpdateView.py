@@ -9,11 +9,35 @@ from django.contrib.auth import authenticate
 
 from server.models import File
 
-class FileCreateView(View):
-    def get(self, request):
-        return HttpResponse("Method not allowed. Use POST")
+class FileUpdateView(View):
+    def get(self, request, id=0):
+        username = request.GET.get("username", "")
+        password = request.GET.get("password", "")
+        user = authenticate(username=username, password=password)
 
-    def post(self, request):
+        if(user is None):
+            return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
+
+        # Load the file
+        try:
+            file = user.files.get(id=id)
+            return JsonResponse({
+                "status" : "success",
+                "file" : {
+                    "id" : file.getId(),
+                    "name" : file.getName(),
+                }
+            })
+        except File.DoesNotExist:
+            return JsonResponse({
+                "status" : "error",
+                "message" : "Ficheiro não encontrado."
+            })
+
+
+        return JsonResponse({ "status" : "success", "files": files})
+
+    def post(self, request, id=0):
         bodyUnicode = request.body.decode('utf-8')
         jsonRequestData = json.loads(bodyUnicode)
 
