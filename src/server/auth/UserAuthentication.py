@@ -13,7 +13,7 @@ class UserAuthentication:
             print("auth failed")
             return None
 
-    def get_user(user_id):
+    def get_user(self, user_id):
         try:
             user = User.objects.get(id=user_id)
             return user

@@ -102,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Authenticators
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend'
+    'server.auth.UserAuthentication'
 ]
 
 # Password hashes (argon2 by default)
