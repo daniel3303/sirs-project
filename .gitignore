@@ -105,3 +105,7 @@ venv.bak/
 
 # replicas
 replicas/
+
+# IDE - IntelliJ
+.idea/
+*.iml
