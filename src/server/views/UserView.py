@@ -8,4 +8,11 @@ from server.models import User
 
 class UserView(View):
     def get(self, request):
-        return JsonResponse(serializers.serialize('json', User.objects.all()), safe=False)
+        users = []
+        for user in User.objects.all().order_by('username'):
+            users.append({
+                    'id' : user.getId(),
+                    'username' : user.getUsername(),
+                    'name' : user.getName()
+                    })
+        return JsonResponse({ "status" : "success", "users": users})

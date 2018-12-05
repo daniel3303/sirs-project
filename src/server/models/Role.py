@@ -14,6 +14,9 @@ class Role(models.Model):
     read = models.BooleanField(default=False)
     write = models.BooleanField(default=False)
 
+    def getId(self):
+        return self.id
+
     def getOwner(self):
         return self.owner
 

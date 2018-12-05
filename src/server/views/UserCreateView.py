@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -11,9 +13,24 @@ class UserCreateView(View):
         return HttpResponse("Method not allowed. Use POST")
 
     def post(self, request):
-        username = request.POST["username"]
-        password = request.POST["password"]
-        name = request.POST["name"]
+        bodyUnicode = request.body.decode('utf-8')
+        jsonRequestData = json.loads(bodyUnicode)
+
+
+        username = jsonRequestData["username"]
+        password =jsonRequestData["password"]
+        name = jsonRequestData["name"]
 
         user = User()
-        return None;
+        user.setUsername(username)
+        user.setPassword(password)
+        user.setName(name)
+
+
+        try:
+            # Save may raise an exception (for example if the username is already in use)
+            user.save()
+        except:
+            return JsonResponse({'status' : "error", "message" : "O username escolhido já existe."})
+
+        return JsonResponse({'status' : "success"})

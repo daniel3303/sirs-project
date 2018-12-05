@@ -8,7 +8,10 @@ class File(models.Model):
     # The owner of the file
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def getId(self):
+        return self.id
 
+        
     def getName(self):
         return self.name
 
