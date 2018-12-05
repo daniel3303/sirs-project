@@ -11,7 +11,7 @@ class File(models.Model):
     def getId(self):
         return self.id
 
-        
+
     def getName(self):
         return self.name
 
@@ -20,3 +20,6 @@ class File(models.Model):
 
     def getOwner(self):
         return self.owner
+
+    def setOwner(self, newOwner):
+        self.owner = newOwner

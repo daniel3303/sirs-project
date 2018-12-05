@@ -23,6 +23,9 @@ class Role(models.Model):
     def getFile(self):
         return self.file
 
+    def setFile(self, file):
+        self.file = file
+
     def canRead(self):
         return self.read
 
