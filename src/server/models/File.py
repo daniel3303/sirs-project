@@ -88,7 +88,12 @@ class File(models.Model):
         return content
 
     def getBytesForMAC(self):
-        return  self.content + str(self.owner.getId()).encode("utf-8") + self.name.encode("utf-8") + self.key
+        try:
+            owner = self.owner.getId()
+        except File.owner.RelatedObjectDoesNotExist as ex:
+            owner = 0
+
+        return  self.content + str(owner).encode("utf-8") + self.name.encode("utf-8") + self.key
 
 
     def updateMAC(self):
