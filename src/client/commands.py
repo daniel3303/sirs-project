@@ -166,14 +166,16 @@ def ls(urlbase, sess, params):
             print('You don\'t own any file')
             return
 
-        print('id', 'name', 'owner', 'corrupted', 'read permission', 'write permission')
+        print('id', 'name', 'owner id', 'corrupted', 'read permission', 'write permission', sep='|')
         for f in files:
             print(
                 f['id'],
                 f['name'],
-                f['state'],
+                f['owner'],
+                f['corrupted'],
                 f['permissions']['read'],
                 f['permissions']['write']
+                , sep='|'
             )
 
 
