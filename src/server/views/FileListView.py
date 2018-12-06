@@ -19,9 +19,30 @@ class FileListView(View):
 
 
         files = []
+
+        # For each file the user own
         for file in user.files.all():
             files.append({
                     'id' : file.getId(),
-                    'name' : file.getName()
-                    })
+                    'name' : file.getName(),
+                    'owner': file.getOwner().getId(),
+                    'permissions' : {
+                        'read' : True,
+                        'write' : True,
+                    },
+                })
+
+
+        # For each file the user has write or read permissions
+        for role in user.roles.all():
+            file = role.file
+            files.append({
+                    'id' : file.getId(),
+                    'name' : file.getName(),
+                    'owner' : file.getOwner().getId(),
+                    'permissions' : {
+                        'read' : role.canRead(),
+                        'write' : role.canWrite(),
+                    },
+                })
         return JsonResponse({ "status" : "success", "files": files})
