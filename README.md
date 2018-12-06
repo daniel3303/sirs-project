@@ -17,3 +17,5 @@ ssl-server - pip install django-sslserver
 
 # How to run
 python3 manage.py runsslserver --certificate cert.pem --key key.pem
+
+install de certificate on chrome: https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate?page=1&tab=votes#tab-top
