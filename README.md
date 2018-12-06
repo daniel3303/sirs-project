@@ -14,3 +14,6 @@ django - pip install django
 argon2 - pip install django[argon2]
 
 ssl-server - pip install django-sslserver
+
+# How to run
+python3 manage.py runsslserver --certificate cert.pem --key key.pem
