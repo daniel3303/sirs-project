@@ -77,7 +77,6 @@ class FileRolesView(View):
                 "message" : "Ficheiro não encontrado."
             })
 
-
         # Load the target user
         targetUser = None
         try:
@@ -88,12 +87,29 @@ class FileRolesView(View):
                 "message" : "O utilizador a quem pretende adicionar permissões não foi encontrado."
             })
 
-            #role = Role()
-            #role.setUser(targetUser)
-            #role.setReadPermission(canRead)
-            #role.setWritePermission(canWrite)
-            #role.setFile(file)
-            #role.save()
+        # Check if the role already exists, if yes updates it
+        try:
+            role = file.editors.get(user=targetUser)
+            role.setReadPermission(canRead)
+            role.setWritePermission(canWrite)
+            role.save()
 
+            return JsonResponse({'status' : "success"})
+        except Role.DoesNotExist as ex:
+            pass
 
-        return JsonResponse({'status' : "success"})
+        # If the role does not exists then create a new one
+        try:
+            role = Role()
+            role.setUser(targetUser)
+            role.setReadPermission(canRead)
+            role.setWritePermission(canWrite)
+            role.setFile(file)
+            role.save()
+
+            return JsonResponse({'status' : "success"})
+        except Exception as ex:
+            return JsonResponse({
+                "status" : "error",
+                "message" : str(ex)
+            })
