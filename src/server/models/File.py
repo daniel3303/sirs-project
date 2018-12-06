@@ -3,12 +3,9 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, hmac
 from cryptography.hazmat.primitives.asymmetric import padding
 
-from server.Vault import Vault
-
-
-import base64
-
 from django.db import models
+
+from server.Vault import Vault
 from server.models.User import User
 
 
