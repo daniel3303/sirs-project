@@ -27,7 +27,7 @@ class FileView(View):
                 "file" : {
                     "id" : file.getId(),
                     "name" : file.getName(),
-                    "content" : file.getContent(),
+                    "content" : file.getContent()
                 }
             })
         except File.DoesNotExist:
@@ -63,10 +63,16 @@ class FileView(View):
 
             try:
                 file.save()
-            except:
-                return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao atualizar o ficheiro."})
+            except Exception as ex:
+                return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao atualizar o ficheiro. " +str(ex)})
 
             return JsonResponse({'status' : "success"})
+        except File.DoesNotExist:
+            return JsonResponse({
+                "status" : "error",
+                "message" : "Ficheiro não encontrado."
+            })
+
         except File.DoesNotExist:
             return JsonResponse({
                 "status" : "error",

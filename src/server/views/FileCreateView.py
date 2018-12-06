@@ -34,7 +34,7 @@ class FileCreateView(View):
 
         try:
             file.save()
-        except:
-            return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao criar o ficheiro."})
+        except Exception as ex:
+            return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao criar o ficheiro. "+str(ex)})
 
         return JsonResponse({'status' : "success"})

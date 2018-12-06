@@ -26,6 +26,7 @@ class FileListView(View):
                     'id' : file.getId(),
                     'name' : file.getName(),
                     'owner': file.getOwner().getId(),
+                    "key" : str(file.getKey()),
                     'permissions' : {
                         'read' : True,
                         'write' : True,
