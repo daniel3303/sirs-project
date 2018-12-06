@@ -6,6 +6,7 @@ from server.views import UserCreateView
 from server.views import FileListView
 from server.views import FileCreateView
 from server.views import FileView
+from server.views import FileRolesView
 
 urlpatterns = [
     path('users', UserView.as_view()),
@@ -14,4 +15,7 @@ urlpatterns = [
     path('files', FileListView.as_view()),
     path('files/create', FileCreateView.as_view()),
     path('files/<int:id>/', FileView.as_view()),
+    path('files/<int:id>/roles', FileRolesView.as_view()),
+
+
 ]

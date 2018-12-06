@@ -14,6 +14,9 @@ class Role(models.Model):
     read = models.BooleanField(default=False)
     write = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = (('user', 'file'),)
+
     def getId(self):
         return self.id
 
@@ -21,7 +24,7 @@ class Role(models.Model):
         return self.user
 
     def setUser(self, user):
-        return self.user
+        self.user = user
 
     def getFile(self):
         return self.file

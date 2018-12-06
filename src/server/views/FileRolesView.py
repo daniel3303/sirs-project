@@ -8,8 +8,10 @@ from django.core import serializers
 from django.contrib.auth import authenticate
 
 from server.models import File
+from server.models import User
+from server.models import Role
 
-class FileView(View):
+class FileRolesView(View):
     def get(self, request, id=0):
         # Check user authentication
         username = request.GET.get("username", "")
@@ -22,78 +24,76 @@ class FileView(View):
         # Load the file
         try:
             file = user.files.get(id=id)
+
+            roles = []
+            for role in file.editors.all():
+                roles.append({
+                    'write' : role.canWrite(),
+                    'read' : role.canRead(),
+                    'user' : {
+                        'id' : role.getUser().getId(),
+                        'username' : role.getUser().getUsername(),
+                        'name' : role.getUser().getName(),
+                    }
+                })
+
+
             return JsonResponse({
                 "status" : "success",
-                "file" : {
-                    "id" : file.getId(),
-                    "name" : file.getName(),
-                    "content" : file.getContent(),
-                }
-            })
+                "roles" : roles,
+                })
+
         except File.DoesNotExist:
             return JsonResponse({
                 "status" : "error",
                 "message" : "Ficheiro não encontrado."
             })
+
 
     def post(self, request, id=0):
         bodyUnicode = request.body.decode('utf-8')
         jsonRequestData = json.loads(bodyUnicode)
 
-        # Check user authentication
-        username = jsonRequestData["username"]
-        password = jsonRequestData["password"]
+        targetUserId = jsonRequestData.get("userId", 0)
+        canRead = jsonRequestData.get("read", False)
+        canWrite = jsonRequestData.get("write", False)
 
+        username = jsonRequestData["username"]
+        password =jsonRequestData["password"]
+
+        # Check user authentication
         user = authenticate(username=username, password=password)
         if(user is None):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
 
 
         # Load the file
+        file = None
         try:
             file = user.files.get(id=id)
-
-            content = jsonRequestData.get("content", None)
-            if content is not None:
-                file.setContent(content)
-
-            name = jsonRequestData.get("name", None)
-            if name is not None:
-                file.setName(name)
-
-            try:
-                file.save()
-            except:
-                return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao atualizar o ficheiro."})
-
-            return JsonResponse({'status' : "success"})
-        except File.DoesNotExist:
+        except File.DoesNotExist as ex:
             return JsonResponse({
                 "status" : "error",
                 "message" : "Ficheiro não encontrado."
             })
 
-    # Delete the file with a given id
-    def delete(self, request, id = 0):
-        bodyUnicode = request.body.decode('utf-8')
-        jsonRequestData = json.loads(bodyUnicode)
 
-        # Check user authentication
-        username = jsonRequestData["username"]
-        password = jsonRequestData["password"]
-
-        user = authenticate(username=username, password=password)
-        if(user is None):
-            return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
-
-        # Load the file
+        # Load the target user
+        targetUser = None
         try:
-            file = user.files.get(id=id)
-            file.delete()
-            return JsonResponse({'status' : "success"})
-
-        except File.DoesNotExist:
+            targetUser = User.objects.get(id=targetUserId)
+        except User.DoesNotExist as ex:
             return JsonResponse({
                 "status" : "error",
-                "message" : "Ficheiro não encontrado."
+                "message" : "O utilizador a quem pretende adicionar permissões não foi encontrado."
             })
+
+            #role = Role()
+            #role.setUser(targetUser)
+            #role.setReadPermission(canRead)
+            #role.setWritePermission(canWrite)
+            #role.setFile(file)
+            #role.save()
+
+
+        return JsonResponse({'status' : "success"})
