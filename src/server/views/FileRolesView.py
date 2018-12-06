@@ -87,6 +87,13 @@ class FileRolesView(View):
                 "message" : "O utilizador a quem pretende adicionar permissões não foi encontrado."
             })
 
+        # If read = false and write = false then just delete a role if it exists
+        try:
+            file.editors.get(user=targetUser).delete()
+        except Role.DoesNotExist as ex:
+                return JsonResponse({"status" : "error", "message" : str(ex)})
+
+
         # Check if the role already exists, if yes updates it
         try:
             role = file.editors.get(user=targetUser)
@@ -109,7 +116,4 @@ class FileRolesView(View):
 
             return JsonResponse({'status' : "success"})
         except Exception as ex:
-            return JsonResponse({
-                "status" : "error",
-                "message" : str(ex)
-            })
+            return JsonResponse({"status" : "error","message" : str(ex)})
