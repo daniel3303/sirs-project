@@ -9,15 +9,13 @@ O certificado (.pem) é uma chave RSA de 4096bits. A chave de desencriptação �
 
 
 # Depencencies
-requests - pip install requests
-
-django - pip install django
-
-argon2 - pip install django[argon2]
-
-ssl-server - pip install django-sslserver
-
-cryptography - pip install cryptography
+| module | installation command |
+| ------ | -------------------- |
+|requests| pip install requests |
+|django  | pip install django   |
+|argon2  | pip install django[argon2] |
+|ssl-server | pip install django-sslserver|
+|cryptography | pip install cryptography|
 
 
 # How to run
