@@ -88,10 +88,13 @@ class FileRolesView(View):
             })
 
         # If read = false and write = false then just delete a role if it exists
-        try:
-            file.editors.get(user=targetUser).delete()
-        except Role.DoesNotExist as ex:
-                return JsonResponse({"status" : "error", "message" : str(ex)})
+        if(canRead == False and canWrite == False):
+            try:
+                file.editors.get(user=targetUser).delete()
+                return JsonResponse({'status' : "success"})
+            except Role.DoesNotExist as ex:
+                    return JsonResponse({"status" : "error", "message" : str(ex)})
+
 
 
         # Check if the role already exists, if yes updates it
