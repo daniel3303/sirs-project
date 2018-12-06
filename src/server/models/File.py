@@ -11,6 +11,12 @@ class File(models.Model):
     # The file's content
     content = models.TextField(default="")
 
+    # File's AES256 encryption key
+    key = models.CharField(max_length=512)
+
+    # File's HMAC
+    mac = models.CharField(max_length=512, default="")
+
     def getId(self):
         return self.id
 
