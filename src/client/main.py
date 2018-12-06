@@ -69,6 +69,8 @@ cmdprocessors = {
     'test': test,
     'upload': upload,
     'download': download,
+    'register': register_user,
+    'create': create,
 }
 
 
@@ -86,7 +88,8 @@ def process(url, sess, cmd, flags):
 
 
 def parsecmd(strcmd):
-    cmd, *params = strcmd.split(' ')
+    cmd, *listparams = strcmd.split(' ')
+    params = {k: v for k, v in (x.split('=', 2) for x in listparams)}
     return cmd, params
 
 
