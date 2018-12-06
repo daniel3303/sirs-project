@@ -41,6 +41,6 @@ class FileCreateView(View):
                     'status' : "success",
                     'file' : {
                         'id' : file.getId(),
-                        'name' file.getName(),
+                        'name' : file.getName(),
                     }
                 })
