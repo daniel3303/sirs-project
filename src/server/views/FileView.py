@@ -27,7 +27,9 @@ class FileView(View):
                 "file" : {
                     "id" : file.getId(),
                     "name" : file.getName(),
-                    "content" : file.getContent()
+                    "content" : file.getContent(),
+                    'owner': file.getOwner().getId(),
+                    "corrupted" : file.isCorrupted(),
                 }
             })
         except File.DoesNotExist:

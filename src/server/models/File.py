@@ -1,6 +1,10 @@
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, hmac
+from cryptography.hazmat.primitives.asymmetric import padding
+
+from server.Vault import Vault
+
 
 import base64
 
@@ -15,9 +19,10 @@ class File(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # On object creation
         if self.content is None:
+            self.key = File.generateFernetKey()
             self.setContent("")
-        self.checkIntegrity()
 
 
     # The file name
@@ -27,13 +32,13 @@ class File(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
 
     # The file's content
-    content = models.BinaryField()
+    content = models.BinaryField(default=None)
 
     # File's AES256 encryption key
-    key = models.BinaryField(max_length=32, default=Fernet.generate_key())
+    key = models.BinaryField(max_length=32, default=None)
 
     # File's HMAC
-    mac = models.BinaryField(max_length=64)
+    mac = models.BinaryField(max_length=64, default=None)
 
     def getId(self):
         return self.id
@@ -56,6 +61,18 @@ class File(models.Model):
     def getKey(self):
         return self.key
 
+    def getDecryptedKey(self):
+        key = Vault.getPrivateKey().decrypt(
+            self.key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        return key
+
+
     def getContent(self):
         return self.decrypt(self.content)
 
@@ -64,18 +81,22 @@ class File(models.Model):
         self.updateMAC()
 
     def encrypt(self, content):
-        fernet = Fernet(self.key)
+        fernet = Fernet(self.getDecryptedKey())
         contentToken = fernet.encrypt(content.encode("utf-8"))
         return contentToken
 
     def decrypt(self, content):
-        fernet = Fernet(self.key)
+        fernet = Fernet(self.getDecryptedKey())
         content = fernet.decrypt(self.content).decode("utf-8")
         return content
 
+    def getBytesForMAC(self):
+        return  self.content + str(self.owner.getId()).encode("utf-8") + self.name.encode("utf-8") + self.key
+
+
     def updateMAC(self):
-        h = hmac.HMAC(self.key, hashes.SHA512(), backend=default_backend())
-        h.update(self.content)
+        h = hmac.HMAC(self.getDecryptedKey(), hashes.SHA512(), backend=default_backend())
+        h.update(self.getBytesForMAC())
         self.mac = h.finalize()
 
     def save(self, *args, **kwargs):
@@ -84,8 +105,30 @@ class File(models.Model):
 
     def checkIntegrity(self):
         try:
-            h = hmac.HMAC(self.key, hashes.SHA512(), backend=default_backend())
-            h.update(self.content)
+            h = hmac.HMAC(self.getDecryptedKey(), hashes.SHA512(), backend=default_backend())
+            h.update(self.getBytesForMAC())
             h.verify(self.mac)
         except Exception as ex:
             raise File.FileCorruptedException("O ficheiro " + str(self.name)+" está corrompido. A assinatura é diferente do digest.")
+
+    def isCorrupted(self):
+        try:
+            self.checkIntegrity()
+            return False
+        except Exception as ex:
+            return True
+
+    @staticmethod
+    def generateFernetKey():
+        uncipheredKey = Fernet.generate_key()
+
+        cipherKey = Vault.getPublicKey().encrypt(
+            uncipheredKey,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+
+        return cipherKey

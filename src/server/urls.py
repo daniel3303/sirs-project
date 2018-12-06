@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('files', FileListView.as_view()),
     path('files/create', FileCreateView.as_view()),
-    path('files/<int:id>/', FileView.as_view()),
+    path('files/<int:id>', FileView.as_view()),
     path('files/<int:id>/roles', FileRolesView.as_view()),
 
 

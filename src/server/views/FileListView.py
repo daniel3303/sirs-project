@@ -26,6 +26,7 @@ class FileListView(View):
                     'id' : file.getId(),
                     'name' : file.getName(),
                     'owner': file.getOwner().getId(),
+                    "corrupted" : file.isCorrupted(),
                     "key" : str(file.getKey()),
                     'permissions' : {
                         'read' : True,
@@ -41,6 +42,7 @@ class FileListView(View):
                     'id' : file.getId(),
                     'name' : file.getName(),
                     'owner' : file.getOwner().getId(),
+                    "corrupted" : file.isCorrupted(),
                     'permissions' : {
                         'read' : role.canRead(),
                         'write' : role.canWrite(),
