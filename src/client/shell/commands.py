@@ -10,21 +10,57 @@ LIST_USERS = 'users'
 REGISTER_USER_RESOURCE = 'users/create'
 
 
-# TODO:
-# Check if they receive the right parameters
-# Check the response status code
-
 def read(urlbase, sess, params):
-    pass
+    if params.get('id', None) is None:
+        print('Argument "id" expected for command download')
+        return
+
+    fileid = int(params['id'])
+
+    url = urljoin(urlbase, FILE_RESOURCE % fileid)
+    reqparams = {
+        'username': sess.auth[0],
+        'password': sess.auth[1],
+    }
+
+    res = sess.get(url, params=reqparams)
+
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
+
+    resjson = res.json()
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
+
+    file = resjson['file']
+    if file['corrupted']:
+        print('The file is corrupted', file=stderr)
+        return
+
+    print('Id:', file['id'])
+    print('Name:', file['name'])
+    print('Owner Id:', file['owner'])
+    print('Content:')
+    print('  ', file['content'])
 
 
 def write(urlbase, sess, params):
-    pass
+    pass  # TODO
 
 
 def register_user(urlbase, sess, params):
-    if len(params) < 3:
-        print('Arguments "username", "password and "name" expected for command Register User')
+    if params.get('username', None) is None:
+        print('Arguments "username" expected for command Register User')
+        return
+
+    if params.get('password', None) is None:
+        print('Arguments "password expected for command Register User')
+        return
+
+    if params.get('name', None) is None:
+        print('Argument "name" expected for command Register User')
         return
 
     req = {
@@ -37,7 +73,12 @@ def register_user(urlbase, sess, params):
     reqjson = json.dumps(req)
 
     with sess.post(url, data=reqjson) as res:
+        if res.status_code != 200:
+            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+            return
+
         resjosn = res.json()
+
         if resjosn['status'] != 'success':
             print(resjosn['message'], file=stderr)
             return
@@ -46,7 +87,7 @@ def register_user(urlbase, sess, params):
 
 
 def _create(urlbase, sess, params):
-    if len(params) < 1:
+    if params.get('name', None) is None:
         print('Argument "name" expected for command upload')
         return
 
@@ -59,6 +100,11 @@ def _create(urlbase, sess, params):
         'password': sess.auth[1],
     })
     res = sess.post(createurl, data=createjson)
+
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
+
     resjson = res.json()
 
     if resjson['status'] != 'success':
@@ -70,20 +116,23 @@ def _create(urlbase, sess, params):
 
 
 def create(urlbase, sess, params):
-    id = _create(urlbase,sess, params)
+    id = _create(urlbase, sess, params)
+
     if id is None:
         return
+
     name = params['name']
+
     print('File %s created with id %d' % (name, id))
 
 
 def upload(urlbase, sess, params):
-    filename = params['file']
+    filename = params.get('file', None)
     if filename is None:
         print('Argument "file" expected for command upload')
         return
 
-    name = params['name']
+    name = params.get('name', None)
     if name is None:
         print('Argument "name" expected for command upload')
         return
@@ -123,6 +172,10 @@ def _change(urlbase, sess, params):
     changejson = json.dumps(req)
     res = sess.post(fileurl, data=changejson)
 
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
+
     resjson = res.json()
     if resjson['status'] != 'success':
         print(resjson['message'], file=stderr)
@@ -139,8 +192,12 @@ def change(urlbase, sess, params):
 
 
 def download(urlbase, sess, params):
-    if len(params) < 2:
-        print('Arguments "name" and "id" expected for command download')
+    if params.get('id', None) is None:
+        print('Argument "id" expected for command download')
+        return
+
+    if params.get('name', None) is None:
+        print('Argument "name" expected for command download')
         return
 
     fileid = int(params['id'])
@@ -154,6 +211,11 @@ def download(urlbase, sess, params):
     name = params['name']
 
     res = sess.get(url, params=reqparams)
+
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
+
     resjson = res.json()
     if resjson['status'] != 'success':
         print(resjson['message'], file=stderr)
@@ -161,7 +223,7 @@ def download(urlbase, sess, params):
 
     file = resjson['file']
     if file['corrupted']:
-        print('', file=stderr)
+        print('The file is corrupted', file=stderr)
         return
 
     with open(name, 'w+') as pfile:
@@ -179,6 +241,11 @@ def ls(urlbase, sess, params):
     }
 
     with sess.get(url, params=reqparams) as res:
+
+        if res.status_code != 200:
+            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+            return
+
         resjson = res.json()
 
         if resjson['status'] != 'success':
@@ -219,6 +286,10 @@ def delete(urlbase, sess, params):
     deletejson = json.dumps(req)
     res = sess.delete(fileurl, data=deletejson)
 
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
+
     resjson = res.json()
     if resjson['status'] != 'success':
         print(resjson['message'], file=stderr)
@@ -228,6 +299,10 @@ def delete(urlbase, sess, params):
 
 
 def check_permissions(urlbase, sess, params):
+    if params.get('id', None) is None:
+        print('Argument "id" expected for command Check Permissions')
+        return
+
     fileid = int(params['id'])
 
     url = urljoin(urlbase, ROLES_RESOURCE % fileid)
@@ -238,6 +313,10 @@ def check_permissions(urlbase, sess, params):
     }
 
     with sess.get(url, params=reqparams) as res:
+        if res.status_code != 200:
+            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+            return
+
         resjson = res.json()
 
         if resjson['status'] != 'success':
@@ -264,11 +343,11 @@ def check_permissions(urlbase, sess, params):
 
 def manage_permissions(urlbase, sess, params):
     if params.get('fileId', None) is None:
-        print('Arguments "fileId" expected for command Manage Permissions')
+        print('Argument "fileId" expected for command Manage Permissions')
         return
 
     if params.get('userId', None) is None:
-        print('Arguments "userId" expected for command Manage Permissions')
+        print('Argument "userId" expected for command Manage Permissions')
         return
 
     fileid = int(params['fileId'])
@@ -288,6 +367,10 @@ def manage_permissions(urlbase, sess, params):
 
     res = sess.post(fileurl, data=changejson)
 
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
+
     resjson = res.json()
     if resjson['status'] != 'success':
         print(resjson['message'], file=stderr)
@@ -300,6 +383,10 @@ def list_users(urlbase, sess, params):
     url = urljoin(urlbase, LIST_USERS)
 
     with sess.get(url) as res:
+        if res.status_code != 200:
+            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+            return
+
         resjson = res.json()
 
         if resjson['status'] != 'success':
@@ -319,7 +406,6 @@ def list_users(urlbase, sess, params):
                 user['name'],
                 sep='|'
             )
-
 
 
 def test(urlbase, sess, params):

@@ -92,6 +92,7 @@ def help(*params):
     print(' ', 'check id=<file_id>')
     print(' ', 'manage fileId=<file_id> userId=<user_id> read=[True|False] write=[True|False]')
     print(' ', 'users')
+    print(' ', 'read id=<file_id>')
 
 
 cmdprocessors = {
@@ -108,6 +109,7 @@ cmdprocessors = {
     'check': check_permissions,
     'manage': manage_permissions,
     'users': list_users,
+    'read': read,
 }
 
 
