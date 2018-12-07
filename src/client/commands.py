@@ -4,9 +4,13 @@ from urllib.parse import urljoin
 
 LIST_FILES_RESOURCE = 'files'
 CREATE_FILE_RESOURCE = 'files/create'
-FILE_RESOURCE = 'file/%d'
+FILE_RESOURCE = 'files/%d'
 REGISTER_USER_RESOURCE = 'users/create'
 
+
+# TODO:
+# Check if they receive the right parameters
+# Check the response status code
 
 def read(urlbase, sess, params):
     pass
@@ -39,7 +43,7 @@ def register_user(urlbase, sess, params):
     print('User created with success')
 
 
-def create(urlbase, sess, params):
+def _create(urlbase, sess, params):
     if len(params) < 1:
         print('Argument "name" expected for command upload')
         return
@@ -59,51 +63,60 @@ def create(urlbase, sess, params):
         print(resjson['message'], file=stderr)
         return
 
-    print('File created with success')
+    file = resjson['file']
+    return int(file['id'])
+
+
+def create(urlbase, sess, params):
+    id = _create(urlbase,sess, params)
+    if id is None:
+        return
+    name = params['name']
+    print('File %s created with id %d' % (name, id))
 
 
 def upload(urlbase, sess, params):
-    if len(params) < 2:
-        print('Arguments "name" and "file" expected for command upload')
+    filename = params['file']
+    if filename is None:
+        print('Argument "file" expected for command upload')
         return
 
-    createurl = urljoin(urlbase, CREATE_FILE_RESOURCE)
     name = params['name']
-    file = params['file']
-
-    createjson = json.dumps({'name': name})
-    res = sess.post(createurl, data=createjson)
-    resjson = res.json()
-
-    if resjson['status'] != 'success':
-        print(resjson['message'], file=stderr)
+    if name is None:
+        print('Argument "name" expected for command upload')
         return
 
-    fileid = resjson['id']
+    fileid = _create(urlbase, sess, params)
+    params['id'] = str(fileid)
 
-    print('File created with success')
+    with open(filename) as pfile:
+        params['content'] = pfile.read()
 
-    change(urlbase, sess, {'id': fileid, 'file': file})
+    success = _change(urlbase, sess, params)
+    if success:
+        print('File %s upload with id %d' % (name, fileid))
 
 
-def change(urlbase, sess, params):
-    if params.get('id', None) is not None:
+def _change(urlbase, sess, params):
+    if params.get('id', None) is None:
         print('Arguments "id" expected for command change')
-        return
+        return False
 
-    fileid = params['id']
+    fileid = int(params['id'])
     fileurl = urljoin(urlbase, FILE_RESOURCE % fileid)
 
-    req = {}
+    req = {
+        'username': sess.auth[0],
+        'password': sess.auth[1],
+    }
 
     name = params.get('name', None)
     if name is not None:
         req['name'] = name
 
-    file = params.get('file', None)
-    if file is not None:
-        with open(file, 'r') as pfile:
-            req['content'] = pfile.read()
+    content = params.get('content', None)
+    if content is not None:
+        req['content'] = content
 
     changejson = json.dumps(req)
     res = sess.post(fileurl, data=changejson)
@@ -111,9 +124,16 @@ def change(urlbase, sess, params):
     resjson = res.json()
     if resjson['status'] != 'success':
         print(resjson['message'], file=stderr)
-        return
+        return False
 
-    print('File updated with success')
+    return True
+
+
+def change(urlbase, sess, params):
+    success = _change(urlbase, sess, params)
+
+    if success:
+        print('File updated with success')
 
 
 def download(urlbase, sess, params):
@@ -131,19 +151,21 @@ def download(urlbase, sess, params):
 
     name = params['name']
 
-    with open(name, 'w') as pfile:
-        res = sess.get(url, params=reqparams)
-        resjson = res.json()
-        if resjson['status'] != 'success':
-            print(resjson['message'], file=stderr)
-            return
+    res = sess.get(url, params=reqparams)
+    resjson = res.json()
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
 
-        file = resjson['file']
-        if file['corrupted']:
-            print('', file=stderr)
-            return
+    file = resjson['file']
+    if file['corrupted']:
+        print('', file=stderr)
+        return
 
+    with open(name, 'w+') as pfile:
         pfile.write(file['content'])
+
+    print('File downloaded')
 
 
 def ls(urlbase, sess, params):
@@ -178,6 +200,29 @@ def ls(urlbase, sess, params):
                 , sep='|'
             )
 
+
+def delete(urlbase, sess, params):
+    if params.get('id', None) is None:
+        print('Arguments "id" expected for command delete')
+        return
+
+    fileid = int(params['id'])
+    fileurl = urljoin(urlbase, FILE_RESOURCE % fileid)
+
+    req = {
+        'username': sess.auth[0],
+        'password': sess.auth[1],
+    }
+
+    deletejson = json.dumps(req)
+    res = sess.delete(fileurl, data=deletejson)
+
+    resjson = res.json()
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
+
+    print('File deleted with success')
 
 def test(urlbase, sess, params):
     print(urlbase)
