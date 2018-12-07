@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SIRS A43",
+  "name": "Browser Client for SIRS Group A43 Project",
   "icons": [
     {
       "src": "favicon.ico",
