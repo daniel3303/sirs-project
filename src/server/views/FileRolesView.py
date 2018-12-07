@@ -119,4 +119,5 @@ class FileRolesView(View):
 
             return JsonResponse({'status' : "success"})
         except Exception as ex:
+            raise ex
             return JsonResponse({"status" : "error","message" : str(ex)})
