@@ -83,6 +83,7 @@ def help(*params):
     print('Commands available:')
     print(' ', 'register username=<username> password=<password>')
     print(' ', 'ls')
+    print('     ', 'List files')
     print(' ', 'create name=<file_name>')
     print(' ', 'change id=<file_id> content=<new_file_content>')
     print(' ', 'download id=<file_id> name=<file_name>')
@@ -92,13 +93,16 @@ def help(*params):
     print(' ', 'check id=<file_id>')
     print(' ', 'manage fileId=<file_id> userId=<user_id> read=[True|False] write=[True|False]')
     print(' ', 'users')
-    print(' ', 'read id=<file_id>')
+    print(' ', 'read id=<file_id> [numbered=[TRUE|FALSE]]')
+    print(' ', 'write id=<file_id> content=<content_to_insert> after=<line>')
+    print(' ', 'append id=<file_id> content=<content_to_append>')
+    print(' ', 'replace id=<file_id> line=<line_number> content=<new_line_content>')
+    print(' ', 'erase id=<file_id> line=<line_number>')
 
 
 cmdprocessors = {
     'help': help,
     'ls': ls,
-    'test': test,
     'upload': upload,
     'download': download,
     'register': register_user,
@@ -110,6 +114,10 @@ cmdprocessors = {
     'manage': manage_permissions,
     'users': list_users,
     'read': read,
+    'write': write,
+    'append': append,
+    'replace': replace,
+    'erase': erase
 }
 
 

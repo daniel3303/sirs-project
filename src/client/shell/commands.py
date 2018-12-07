@@ -9,8 +9,10 @@ ROLES_RESOURCE = 'files/%d/roles'
 LIST_USERS = 'users'
 REGISTER_USER_RESOURCE = 'users/create'
 
+STRINGS_TRUE = ['True', 'T', 'TRUE', 'true']
 
-def read(urlbase, sess, params):
+
+def _read(urlbase, sess, params):
     if params.get('id', None) is None:
         print('Argument "id" expected for command download')
         return
@@ -39,15 +41,134 @@ def read(urlbase, sess, params):
         print('The file is corrupted', file=stderr)
         return
 
+    return file
+
+
+def read(urlbase, sess, params):
+    file = _read(urlbase, sess, params)
+    if file is None:
+        return
+
+    numbered = params.get('numbered', 'False')
+
     print('Id:', file['id'])
     print('Name:', file['name'])
     print('Owner Id:', file['owner'])
+
+    content = file['content']
+
+    if not content:
+        print('FILE IS EMPTY')
+        return
+
     print('Content:')
-    print('  ', file['content'])
+
+    if numbered not in STRINGS_TRUE:
+        print('  ', content)
+        return
+
+    lines = content.split('\n')
+
+    for idx, l in enumerate(lines):
+        print(idx + 1, l, sep=': ')
 
 
 def write(urlbase, sess, params):
-    pass  # TODO
+    if params.get('content', None) is None:
+        print('Argument "content" expected for command append')
+        return
+
+    if params.get('after', None) is None:
+        print('Argument "after" expected for command append')
+        return
+
+    file = _read(urlbase, sess, params)
+    if file is None:
+        return
+
+    filecontent = file['content']
+    lines = filecontent.split('\n')
+
+    content = params['content']
+    after = int(params['after'])
+
+    lines.insert(after, content)
+    params['content'] = '\n'.join(lines)
+
+    success = _change(urlbase, sess, params)
+
+    if success:
+        print('Content written with success')
+
+
+def replace(urlbase, sess, params):
+    if params.get('content', None) is None:
+        print('Argument "content" expected for command append')
+        return
+
+    if params.get('line', None) is None:
+        print('Argument "line" expected for command append')
+        return
+
+    file = _read(urlbase, sess, params)
+    if file is None:
+        return
+
+    filecontent = file['content']
+    lines = filecontent.split('\n')
+
+    content = params['content']
+    nline = int(params['line'])
+
+    lines[nline - 1] = content
+    params['content'] = '\n'.join(lines)
+
+    success = _change(urlbase, sess, params)
+
+    if success:
+        print('Content replaced with success')
+
+
+def erase(urlbase, sess, params):
+    if params.get('line', None) is None:
+        print('Argument "line" expected for command append')
+        return
+
+    file = _read(urlbase, sess, params)
+    if file is None:
+        return
+
+    filecontent = file['content']
+    lines = filecontent.split('\n')
+
+    nline = int(params['line'])
+
+    lines.pop(nline - 1)
+    params['content'] = '\n'.join(lines)
+
+    success = _change(urlbase, sess, params)
+
+    if success:
+        print('Content erased with success')
+
+
+def append(urlbase, sess, params):
+    if params.get('content', None) is None:
+        print('Argument "content" expected for command append')
+        return
+
+    file = _read(urlbase, sess, params)
+    if file is None:
+        return
+
+    content = params['content']
+
+    params['content'] = '\n'.join([file['content'], content])
+
+    success = _change(urlbase, sess, params)
+
+    if success:
+        print('Content appended with success')
 
 
 def register_user(urlbase, sess, params):
@@ -192,39 +313,15 @@ def change(urlbase, sess, params):
 
 
 def download(urlbase, sess, params):
-    if params.get('id', None) is None:
-        print('Argument "id" expected for command download')
-        return
-
     if params.get('name', None) is None:
         print('Argument "name" expected for command download')
         return
 
-    fileid = int(params['id'])
-
-    url = urljoin(urlbase, FILE_RESOURCE % fileid)
-    reqparams = {
-        'username': sess.auth[0],
-        'password': sess.auth[1],
-    }
+    file = _read(urlbase, sess, params)
+    if file is None:
+        return
 
     name = params['name']
-
-    res = sess.get(url, params=reqparams)
-
-    if res.status_code != 200:
-        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
-        return
-
-    resjson = res.json()
-    if resjson['status'] != 'success':
-        print(resjson['message'], file=stderr)
-        return
-
-    file = resjson['file']
-    if file['corrupted']:
-        print('The file is corrupted', file=stderr)
-        return
 
     with open(name, 'w+') as pfile:
         pfile.write(file['content'])
@@ -356,11 +453,10 @@ def manage_permissions(urlbase, sess, params):
     rd = params.get('read', 'False')
     wt = params.get('write', 'False')
 
-    stringstrue = ['True', 'T', 'TRUE']
     changejson = json.dumps({
         'userId': params['userId'],
-        'read': rd in stringstrue,
-        'write': wt in stringstrue,
+        'read': rd in STRINGS_TRUE,
+        'write': wt in STRINGS_TRUE,
         'username': sess.auth[0],
         'password': sess.auth[1],
     })
@@ -406,14 +502,3 @@ def list_users(urlbase, sess, params):
                 user['name'],
                 sep='|'
             )
-
-
-def test(urlbase, sess, params):
-    print(urlbase)
-    print(sess)
-    print(params)
-
-    with sess.get(urlbase) as r:
-        print(r.status_code)
-        print(r.encoding)
-        print(r.text)
