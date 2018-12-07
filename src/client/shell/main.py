@@ -1,3 +1,4 @@
+import itertools
 import sys
 import requests
 from commands import *
@@ -88,6 +89,9 @@ def help(*params):
     print(' ', 'delete id=<file_id>')
     print(' ', 'upload name=<server_file_name> file=<file_name>')
     print(' ', 'login username=<username> password=<password>')
+    print(' ', 'check id=<file_id>')
+    print(' ', 'manage fileId=<file_id> userId=<user_id> read=[True|False] write=[True|False]')
+    print(' ', 'users')
 
 
 cmdprocessors = {
@@ -100,7 +104,10 @@ cmdprocessors = {
     'create': create,
     'change': change,
     'delete': delete,
-    'login': lambda url, sess, opt: authenticate(sess, opt)
+    'login': lambda url, sess, opt: authenticate(sess, opt),
+    'check': check_permissions,
+    'manage': manage_permissions,
+    'users': list_users,
 }
 
 
@@ -144,7 +151,8 @@ def splitter(string):
 
 def parsecmd(strcmd):
     cmd, *listparams = splitter(strcmd)
-    params = {k: v for k, v in (x.split('=', 2) for x in listparams)}
+    listparams = list(itertools.filterfalse(lambda p: '=' not in p, listparams))
+    params = {k: v for k, v in (p.split('=', 2) for p in listparams)}
     return cmd, params
 
 

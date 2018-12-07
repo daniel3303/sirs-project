@@ -5,6 +5,8 @@ from urllib.parse import urljoin
 LIST_FILES_RESOURCE = 'files'
 CREATE_FILE_RESOURCE = 'files/create'
 FILE_RESOURCE = 'files/%d'
+ROLES_RESOURCE = 'files/%d/roles'
+LIST_USERS = 'users'
 REGISTER_USER_RESOURCE = 'users/create'
 
 
@@ -223,6 +225,102 @@ def delete(urlbase, sess, params):
         return
 
     print('File deleted with success')
+
+
+def check_permissions(urlbase, sess, params):
+    fileid = int(params['id'])
+
+    url = urljoin(urlbase, ROLES_RESOURCE % fileid)
+
+    reqparams = {
+        'username': sess.auth[0],
+        'password': sess.auth[1],
+    }
+
+    with sess.get(url, params=reqparams) as res:
+        resjson = res.json()
+
+        if resjson['status'] != 'success':
+            print(resjson['message'], file=stderr)
+            return
+
+        roles = resjson['roles']
+        if len(roles) == 0:
+            print('You didn\'t gave permissions over this file to anyone')
+            return
+
+        print('id', 'username', 'name', 'read permission', 'write permission', sep='|')
+        for r in roles:
+            user = r['user']
+            print(
+                user['id'],
+                user['username'],
+                user['name'],
+                r['read'],
+                r['write'],
+                sep='|'
+            )
+
+
+def manage_permissions(urlbase, sess, params):
+    if params.get('fileId', None) is None:
+        print('Arguments "fileId" expected for command Manage Permissions')
+        return
+
+    if params.get('userId', None) is None:
+        print('Arguments "userId" expected for command Manage Permissions')
+        return
+
+    fileid = int(params['fileId'])
+    fileurl = urljoin(urlbase, ROLES_RESOURCE % fileid)
+
+    rd = params.get('read', 'False')
+    wt = params.get('write', 'False')
+
+    stringstrue = ['True', 'T', 'TRUE']
+    changejson = json.dumps({
+        'userId': params['userId'],
+        'read': rd in stringstrue,
+        'write': wt in stringstrue,
+        'username': sess.auth[0],
+        'password': sess.auth[1],
+    })
+
+    res = sess.post(fileurl, data=changejson)
+
+    resjson = res.json()
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
+
+    print('User permissions changed with success')
+
+
+def list_users(urlbase, sess, params):
+    url = urljoin(urlbase, LIST_USERS)
+
+    with sess.get(url) as res:
+        resjson = res.json()
+
+        if resjson['status'] != 'success':
+            print(resjson['message'], file=stderr)
+            return
+
+        users = resjson['users']
+        if len(users) == 0:
+            print('There aren\'t any User registered in the system')
+            return
+
+        print('id', 'username', 'name', sep='|')
+        for user in users:
+            print(
+                user['id'],
+                user['username'],
+                user['name'],
+                sep='|'
+            )
+
+
 
 def test(urlbase, sess, params):
     print(urlbase)
