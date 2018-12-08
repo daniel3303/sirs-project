@@ -78,7 +78,7 @@ class FileView(View):
             return JsonResponse({'status' : "success"})
 
 
-    # Delete the file with a given id
+    # Delete the file with a given id (only the file owner can delete)
     def delete(self, request, id = 0):
         bodyUnicode = request.body.decode('utf-8')
         jsonRequestData = json.loads(bodyUnicode)
