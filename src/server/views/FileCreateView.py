@@ -21,7 +21,6 @@ class FileCreateView(View):
         username = jsonRequestData["username"]
         password =jsonRequestData["password"]
 
-        print(jsonRequestData)
         # Check user authentication
         user = authenticate(username=username, password=password)
         if(user is None):

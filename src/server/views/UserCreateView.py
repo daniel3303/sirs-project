@@ -30,7 +30,7 @@ class UserCreateView(View):
         try:
             # Save may raise an exception (for example if the username is already in use)
             user.save()
-        except:
+        except Exception as ex:
             return JsonResponse({'status' : "error", "message" : "O username escolhido já existe."})
 
         return JsonResponse({'status' : "success"})

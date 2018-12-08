@@ -4,18 +4,20 @@ from django.contrib.auth.hashers import *
 class UserAuthentication:
     def authenticate(self, request, username=None, password=None):
         # Checks if it is a valid user
-        print("Auth user: "+username+" password: "+password)
-
         try:
             user = User.objects.get(username=username)
             if(check_password(password, user.getPassword()) == True):
-                print("auth success")
-                return user
+                if(user.isCorrupted() == True):
+                    print("Authentication blocked for '"+username+"'. User corrupted.")
+                    return None
+                else:
+                    print("Authentication successed for '"+username+"'.")
+                    return user
             else:
-                print("auth failed")
+                print("Authentication failed for '"+username+"'.")
                 return None
         except User.DoesNotExist:
-            print("auth failed")
+            print("Authentication failed for '"+username+"'.")
             return None
 
     def get_user(self, user_id):
