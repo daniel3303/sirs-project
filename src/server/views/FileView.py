@@ -19,9 +19,15 @@ class FileView(View):
         if(user is None):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
 
-        # Load the file
-        try:
-            file = user.files.get(id=id)
+        # Load the file to send
+        file = user.getFileForRead(id=id)
+
+        if(file is None):
+            return JsonResponse({
+                "status" : "error",
+                "message" : "Ficheiro não encontrado."
+            })
+        else:    
             return JsonResponse({
                 "status" : "success",
                 "file" : {
@@ -32,11 +38,7 @@ class FileView(View):
                     "corrupted" : file.isCorrupted(),
                 }
             })
-        except File.DoesNotExist:
-            return JsonResponse({
-                "status" : "error",
-                "message" : "Ficheiro não encontrado."
-            })
+
 
     def post(self, request, id=0):
         bodyUnicode = request.body.decode('utf-8')
