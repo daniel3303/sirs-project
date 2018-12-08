@@ -45,3 +45,20 @@ class User(models.Model):
                     return None
 
         return None
+
+    # Returns a file for which the user has write permissions
+    def getFileForWrite(self, id=0):
+        try:
+            file = self.files.get(id=id)
+            return file
+        except Exception as ex:
+            pass
+
+        for role in self.roles.all():
+            if role.getFile().getId() == id:
+                if role.canWrite() == True:
+                    return role.getFile()
+                else:
+                    return None
+
+        return None
