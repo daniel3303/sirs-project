@@ -1,6 +1,7 @@
 import json
 from sys import stderr
 from urllib.parse import urljoin
+from os import path, makedirs
 
 LIST_FILES_RESOURCE = 'files'
 CREATE_FILE_RESOURCE = 'files/create'
@@ -10,6 +11,8 @@ LIST_USERS = 'users'
 REGISTER_USER_RESOURCE = 'users/create'
 
 STRINGS_TRUE = ['True', 'T', 'TRUE', 'true']
+
+DEFAULT_DOWNLOAD_FOLDER = path.abspath('downloads')
 
 
 def _read(urlbase, sess, params):
@@ -64,7 +67,7 @@ def read(urlbase, sess, params):
     print('Content:')
 
     if numbered not in STRINGS_TRUE:
-        print('  ', content)
+        print(content)
         return
 
     lines = content.split('\n')
@@ -313,20 +316,26 @@ def change(urlbase, sess, params):
 
 
 def download(urlbase, sess, params):
-    if params.get('file', None) is None:
-        print('Argument "file" expected for command download')
-        return
-
     file = _read(urlbase, sess, params)
     if file is None:
         return
 
-    name = params['file']
+    location = params.get('location', DEFAULT_DOWNLOAD_FOLDER)
+    name = params.get('file', file['name'])
 
-    with open(name, 'w+') as pfile:
+    filename = path.join(location, name)
+
+    makedirs(path.dirname(filename), exist_ok=True)
+
+    if path.exists(filename):
+        print('The file %s already exists' % filename)
+        return
+
+    with open(filename, 'w+') as pfile:
         pfile.write(file['content'])
 
     print('File downloaded')
+    print('Saved at %s' % filename)
 
 
 def ls(urlbase, sess, params):
@@ -351,7 +360,7 @@ def ls(urlbase, sess, params):
 
         files = resjson['files']
         if len(files) == 0:
-            print('You don\'t own any file')
+            print('You don\'t have access to any file')
             return
 
         print('id', 'name', 'owner id', 'corrupted', 'read permission', 'write permission', sep='|')

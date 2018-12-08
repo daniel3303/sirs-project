@@ -57,6 +57,11 @@ def authenticate(sess, opts):
     password = opts.get('p') or opts.get('password')
     sess.auth = username, password
 
+    if username is None:
+        print('You\'re not authenticated')
+    else:
+        print('Authenticated Configured as %s' % username)
+
 
 def sessionconfig(sess, config, opts):
     cert = config['cert']
@@ -76,8 +81,10 @@ def commandshelp():
     print('     ', 'Create a remote file with name <server_file_name>')
     print(' ', 'change id=<file_id> [content=<new_file_content>] [name=<new_file_name>]')
     print('     ', 'Change content and/or name of the remote file <file_id>')
-    print(' ', 'download id=<file_id> file=<file_name>')
-    print('     ', 'Download remote file <file_id> and save as <file_name>')
+    print(' ', 'download id=<file_id> [file=<file_name>] [location=<dir_path>]')
+    print('     ', 'Download remote file <file_id> and save as <file_name> in the directory <dir_path>')
+    print('     ', 'Default <dir_path> is application folder downloads')
+    print('     ', 'Default <file_name> is the remote file name')
     print(' ', 'delete id=<file_id>')
     print('     ', 'Delete remote file <file_id>')
     print(' ', 'upload name=<server_file_name> file=<file_name>')
