@@ -313,15 +313,15 @@ def change(urlbase, sess, params):
 
 
 def download(urlbase, sess, params):
-    if params.get('name', None) is None:
-        print('Argument "name" expected for command download')
+    if params.get('file', None) is None:
+        print('Argument "file" expected for command download')
         return
 
     file = _read(urlbase, sess, params)
     if file is None:
         return
 
-    name = params['name']
+    name = params['file']
 
     with open(name, 'w+') as pfile:
         pfile.write(file['content'])
