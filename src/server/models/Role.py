@@ -13,6 +13,14 @@ class Role(models.Model):
     class RoleCorruptedException(Exception):
         pass
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # If the model is corrupted remove the permissions
+        if(self._state.adding == False and self.isCorrupted() == True):
+            self.setReadPermission(False)
+            self.setWritePermission(False)
+
 
     # The user
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='roles')
@@ -81,7 +89,7 @@ class Role(models.Model):
             h.update(self.getBytesForMAC())
             h.verify(self.mac)
         except Exception as ex:
-            raise File.FileCorruptedException("O ficheiro " + str(self.name)+" está corrompido. A assinatura é diferente do digest.")
+            raise Role.RoleCorruptedException("A permissão " + str(self.id)+" está corrompida. A assinatura é diferente do digest.")
 
     def isCorrupted(self):
         try:
