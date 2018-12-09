@@ -20,8 +20,14 @@ O certificado (.pem) é uma chave RSA de 4096bits. A chave de desencriptação �
 ``` ssh
 $ python3 manager.py makemigrations
 $ python3 manager.py migrate
+$ python3 manager.py migrate --database=replica1
+$ python3 manager.py migrate --database=replica2
 $ python3 manage.py runsslserver --certificate cert.pem --key key.pem
 ```
+
+
+## Note:
+The command `$ python3 manager.py migrate --database=<replica_name>` must be applied to each replica configured.
 
 
 # How to run
