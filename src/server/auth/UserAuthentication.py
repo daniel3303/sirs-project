@@ -3,6 +3,9 @@ from django.contrib.auth.hashers import *
 
 class UserAuthentication:
     def authenticate(self, request, username=None, password=None):
+        if(username is None or password is None):
+            return None
+            
         # Checks if it is a valid user
         try:
             user = User.objects.get(username=username)
