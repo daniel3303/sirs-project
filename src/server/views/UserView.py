@@ -16,3 +16,19 @@ class UserView(View):
                     'name' : user.getName()
                     })
         return JsonResponse({ "status" : "success", "users": users})
+
+    # Check user credentials
+    def post(self, request):
+        bodyUnicode = request.body.decode('utf-8')
+        jsonRequestData = json.loads(bodyUnicode)
+
+        # Check user authentication
+        username = jsonRequestData["username"]
+        password = jsonRequestData["password"]
+
+        user = authenticate(username=username, password=password)
+
+        if(user is None):
+            return JsonResponse({ "status" : "error", "message": "Autenticação falhou."})
+        else:
+            return JsonResponse({ "status" : "success", "message": "Autenticação efectuada com sucesso."})
