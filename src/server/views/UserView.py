@@ -33,4 +33,9 @@ class UserView(View):
         if(user is None):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou."})
         else:
-            return JsonResponse({ "status" : "success", "message": "Autenticação efectuada com sucesso."})
+            return JsonResponse({
+                        "status" : "success",
+                        "message": "Autenticação efectuada com sucesso.",
+                        "name": user.getName(),
+                        "userId" : user.getId()
+            })
