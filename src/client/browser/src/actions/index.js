@@ -2,6 +2,8 @@ import sirs from "../apis/sirs";
 
 import{
     USER_LOGIN,
+    USER_LOGIN_FAILED,
+    USER_LOGIN_SUCCESS,
     USER_LOGOUT,
     USER_REGISTERED,
     FETCH_FILES,
@@ -11,9 +13,15 @@ import{
 }  from "./types";
 
 export const login = (username, password) => async (dispatch, getState) => {
+    dispatch({ type: USER_LOGIN });
     const response = await sirs.post('/users', { username, password });
-    console.log(response);
-    //dispatch({ type: USER_LOGIN, payload: { username, password, name: "STATIC_NAME", userId: 1 } });
+
+    if(response.data.status === "success"){
+        dispatch({ type: USER_LOGIN_SUCCESS, payload: { username, password, name: response.data.name, userId: response.data.userId } });
+    }else{
+        dispatch({ type: USER_LOGIN_FAILED });
+    }
+
 };
 
 export const logout = () => {

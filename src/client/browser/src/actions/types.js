@@ -1,4 +1,6 @@
 export const USER_LOGIN = "USER_LOGIN";
+export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
+export const USER_LOGIN_FAILED = "USER_LOGIN_FAILED";
 export const USER_LOGOUT = "USER_LOGOUT";
 export const USER_REGISTERED = "USER_REGISTERED";
 export const FETCH_FILES = "FETCH_FILES";

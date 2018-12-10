@@ -25,7 +25,6 @@ class Login extends React.Component{
         return (
             <div className={className}>
                 <label>{label}</label>
-                {console.log(input)}
                 <input {...input} autoComplete="off" />
                 {this.renderError(meta)}
             </div>

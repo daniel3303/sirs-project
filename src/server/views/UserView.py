@@ -36,6 +36,7 @@ class UserView(View):
             return JsonResponse({
                         "status" : "success",
                         "message": "Autenticação efectuada com sucesso.",
+                        "username" : user.getUsername(),
                         "name": user.getName(),
                         "userId" : user.getId()
             })
