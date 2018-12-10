@@ -104,7 +104,8 @@ venv.bak/
 .mypy_cache/
 
 # replicas
-replicas/
+rdb1.sqlite3
+rdb2.sqlite3
 
 # IDE - IntelliJ
 .idea/

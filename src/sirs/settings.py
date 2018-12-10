@@ -33,11 +33,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'server.apps.ServerConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'sslserver',
-    'server',
 ]
 
 MIDDLEWARE = [
@@ -70,12 +70,26 @@ WSGI_APPLICATION = 'sirs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+DATABASE_ROUTERS = ['server.router.Router']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'replica1': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'rdb1.sqlite3'),
+    },
+    'replica2': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'rdb2.sqlite3'),
     }
 }
+
+# Database replication
+MASTER = 'default'  # Main database
+REPLICAS = ['replica1', 'replica2']  # Replicated Databases
 
 
 # Password validation

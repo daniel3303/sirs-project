@@ -19,9 +19,15 @@ class FileView(View):
         if(user is None):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
 
-        # Load the file
-        try:
-            file = user.files.get(id=id)
+        # Load the file to send
+        file = user.getFileForRead(id=id)
+
+        if(file is None):
+            return JsonResponse({
+                "status" : "error",
+                "message" : "Ficheiro não encontrado."
+            })
+        else:
             return JsonResponse({
                 "status" : "success",
                 "file" : {
@@ -32,11 +38,7 @@ class FileView(View):
                     "corrupted" : file.isCorrupted(),
                 }
             })
-        except File.DoesNotExist:
-            return JsonResponse({
-                "status" : "error",
-                "message" : "Ficheiro não encontrado."
-            })
+
 
     def post(self, request, id=0):
         bodyUnicode = request.body.decode('utf-8')
@@ -51,10 +53,15 @@ class FileView(View):
             return JsonResponse({ "status" : "error", "message": "Autenticação falhou. Utilizador ou password errados."})
 
 
-        # Load the file
-        try:
-            file = user.files.get(id=id)
+        # Load the file to update
+        file = user.getFileForWrite(id=id)
 
+        if(file is None):
+            return JsonResponse({
+                "status" : "error",
+                "message" : "Ficheiro não encontrado."
+            })
+        else:
             content = jsonRequestData.get("content", None)
             if content is not None:
                 file.setContent(content)
@@ -69,19 +76,9 @@ class FileView(View):
                 return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao atualizar o ficheiro. " +str(ex)})
 
             return JsonResponse({'status' : "success"})
-        except File.DoesNotExist:
-            return JsonResponse({
-                "status" : "error",
-                "message" : "Ficheiro não encontrado."
-            })
 
-        except File.DoesNotExist:
-            return JsonResponse({
-                "status" : "error",
-                "message" : "Ficheiro não encontrado."
-            })
 
-    # Delete the file with a given id
+    # Delete the file with a given id (only the file owner can delete)
     def delete(self, request, id = 0):
         bodyUnicode = request.body.decode('utf-8')
         jsonRequestData = json.loads(bodyUnicode)

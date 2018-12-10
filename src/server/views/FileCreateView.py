@@ -21,7 +21,6 @@ class FileCreateView(View):
         username = jsonRequestData["username"]
         password =jsonRequestData["password"]
 
-        print(jsonRequestData)
         # Check user authentication
         user = authenticate(username=username, password=password)
         if(user is None):
@@ -37,4 +36,10 @@ class FileCreateView(View):
         except Exception as ex:
             return JsonResponse({'status' : "error", "message" : "Ocorreu um erro ao criar o ficheiro. "+str(ex)})
 
-        return JsonResponse({'status' : "success"})
+        return JsonResponse({
+                    'status' : "success",
+                    'file' : {
+                        'id' : file.getId(),
+                        'name' : file.getName(),
+                    }
+                })
