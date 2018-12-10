@@ -10,9 +10,10 @@ import{
     CREATE_FILE
 }  from "./types";
 
-export const login = (username, password) => {
-    //const response = await sirs.post('users/checkCredentials', { username, password }); //FIXME
-    return { type: USER_LOGIN, payload: { username, password, name: "STATIC_NAME", userId: 1 } };
+export const login = (username, password) => async (dispatch, getState) => {
+    const response = await sirs.post('/users', { username, password });
+    console.log(response);
+    //dispatch({ type: USER_LOGIN, payload: { username, password, name: "STATIC_NAME", userId: 1 } });
 };
 
 export const logout = () => {
@@ -22,7 +23,7 @@ export const logout = () => {
 };
 
 export const fetchFiles = () => async (dispatch, getState) => {
-    const response = await sirs.get('files', {params: { username: getState().auth.username, password: getState().auth.password }});
+    const response = await sirs.get('/files', {params: { username: getState().auth.username, password: getState().auth.password }});
 
     dispatch({
             type: FETCH_FILES,
@@ -32,7 +33,7 @@ export const fetchFiles = () => async (dispatch, getState) => {
 
 
 export const fetchFile = (id) => async (dispatch, getState) => {
-    const response = await sirs.get(`files/${id}`, {params: { username: getState().auth.username, password: getState().auth.password }});
+    const response = await sirs.get(`/files/${id}`, {params: { username: getState().auth.username, password: getState().auth.password }});
 
     dispatch({
             type: FETCH_FILE,
@@ -41,7 +42,7 @@ export const fetchFile = (id) => async (dispatch, getState) => {
 };
 
 export const updateFile = (id, newValues) => async (dispatch, getState) => {
-    const response = await sirs.post(`files/${id}`, {...newValues, username: getState().auth.username, password: getState().auth.password });
+    const response = await sirs.post(`/files/${id}`, {...newValues, username: getState().auth.username, password: getState().auth.password });
 
     dispatch({
         type: UPDATE_FILE
