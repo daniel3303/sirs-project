@@ -19,7 +19,10 @@ class FilesList extends React.Component {
                         <Link to={`/files/${file.id}`} className="header">
                             {file.name}
                         </Link>
-                        <div className="description">Permissions: {(file.permissions.read) ? "r" : ""}{(file.permissions.write) ? "w" : ""}</div>
+                        <div className="description">
+                            Permissions: {(file.permissions.read) ? "r" : ""}{(file.permissions.write) ? "w" : ""}
+                            { (file.owner == this.props.userId) ? <div>You own this file</div> : "" }
+                        </div>
                     </div>
                 </div>
             );
@@ -29,7 +32,7 @@ class FilesList extends React.Component {
     render() {
             return (
             <div>
-                <h2>Ficheiros</h2>
+                <h2>File list</h2>
                 <div className="ui celled list">{this.renderList()}</div>
                 <FileCreate />
             </div>
@@ -39,6 +42,7 @@ class FilesList extends React.Component {
 
 const mapStateToProps = state => {
     return {
+        userId: state.auth.userId,
         files: Object.values(state.files),
         userId: state.auth.userId,
         isLoggedIn: state.auth.isLoggedIn

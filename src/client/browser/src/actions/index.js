@@ -24,6 +24,18 @@ export const login = (username, password) => async (dispatch, getState) => {
 
 };
 
+export const register = (name, username, password) => async (dispatch, getState) => {
+    dispatch({ type: USER_LOGIN });
+    const response = await sirs.post('/users/create', { name, username, password });
+
+    if(response.data.status === "success"){
+        dispatch({ type: USER_LOGIN_SUCCESS, payload: { username, password, name: response.data.name, userId: response.data.userId } });
+    }else{
+        dispatch({ type: USER_LOGIN_FAILED });
+    }
+
+};
+
 export const logout = () => {
     return {
         type: USER_LOGOUT

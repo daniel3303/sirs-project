@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import FilesList from './files/FilesList';
 import FileEdit from './files/FileEdit';
 import Login from './Login.js';
+import Register from './Register.js';
 import Header from './Header';
 
 class App extends React.Component {
@@ -21,7 +22,10 @@ class App extends React.Component {
 
     renderLoggedOutRoutes = () => {
         return (
-            <Route path="/" component={Login}/>
+            <React.Fragment>
+                <Route path="/" exact component={Login}/>
+                <Route path="/register" exact component={Register}/>
+            </React.Fragment>
         );
     }
 

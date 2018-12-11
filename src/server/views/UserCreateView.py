@@ -33,4 +33,10 @@ class UserCreateView(View):
         except Exception as ex:
             return JsonResponse({'status' : "error", "message" : "O username escolhido já existe."})
 
-        return JsonResponse({'status' : "success"})
+        return JsonResponse({
+                'status' : "success",
+                "message": "Registo efetuado com sucesso.",
+                "username" : user.getUsername(),
+                "name": user.getName(),
+                "userId" : user.getId()
+        })
