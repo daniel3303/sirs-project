@@ -196,7 +196,7 @@ def splitter(string):
 def parsecmd(strcmd):
     cmd, *listparams = splitter(strcmd)
     listparams = list(itertools.filterfalse(lambda p: '=' not in p, listparams))
-    params = {k: v for k, v in (p.split('=', 2) for p in listparams)}
+    params = {k: v for k, v in (p.split('=', 1) for p in listparams)}
     return cmd, params
 
 
