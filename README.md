@@ -35,6 +35,8 @@ The command `$ python3 manager.py migrate --database=<replica_name>` must be app
 $ python3 manage.py runsslserver --certificate cert.pem --key key.pem
 ```
 
+The webapp will be available at https://localhost:8000/app/index.html (you must include the index.html part).
+
 [How to install a self signed certificate on chrome](https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate?page=1&tab=votes#tab-top)
 
 
