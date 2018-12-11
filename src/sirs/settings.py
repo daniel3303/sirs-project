@@ -143,4 +143,4 @@ USE_TZ = True
 
 STATIC_URL = '/app/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "client/browser/build")]
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "public")

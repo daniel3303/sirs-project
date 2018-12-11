@@ -28,7 +28,7 @@ class FilesList extends React.Component {
                 <div className="item" key={file.id}>
                     <i className="large middle aligned icon file" />
                     <div className="content">
-                        <Link to={`/files/${file.id}`} className="header">
+                        <Link to={`/app/files/${file.id}`} className="header">
                             {file.name}
                         </Link>
                         <div className="description">

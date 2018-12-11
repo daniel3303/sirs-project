@@ -23,9 +23,10 @@ class App extends React.Component {
     renderLoggedOutRoutes = () => {
         return (
             <React.Fragment>
-                <Route path="/register" exact component={Register}/>
-                <Route path="/login" exact component={Login}/>
-                <Route path="/" exact component={Login}/>
+                <Route path="/app/register" exact component={Register}/>
+                <Route path="/app/login" exact component={Login}/>
+                <Route path="/app/" exact component={Login}/>
+                <Route path="/app/index.html" exact component={() => <Redirect to="/app/" />}/>
             </React.Fragment>
         );
     }
@@ -33,9 +34,10 @@ class App extends React.Component {
     renderLoggedInRoutes = () => {
         return (
             <React.Fragment>
-                <Route path="/files/:id" exact component={FileEdit} />
-                <Route path="/files" exact component={FilesList}/>
-                <Route path="/" exact component={() => <Redirect to="/files" />}/>
+                <Route path="/app/files/:id" exact component={FileEdit} />
+                <Route path="/app/files" exact component={FilesList}/>
+                <Route path="/app/" exact component={() => <Redirect to="/app/files" />}/>
+                <Route path="/app/index.html" exact component={() => <Redirect to="/app/" />}/>
             </React.Fragment>
         );
     }

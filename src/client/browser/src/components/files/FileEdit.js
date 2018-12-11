@@ -99,7 +99,7 @@ class FileEdit extends React.Component{
                     <div className="ui huge header">Edit file: {this.props.file.name}</div>
                     <FileForm initialValues={{name: this.props.file.name, content: this.props.file.content}} onSubmit={this.onFileFormSubmit}/>
                     <br />
-                    <Link to={'/'} className="header">
+                    <Link to={'/app/'} className="header">
                     <button className="ui labeled icon button">
                         <i className="chevron left icon"></i>
                         Return to list of files

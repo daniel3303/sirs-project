@@ -24,13 +24,13 @@ class UserHeaderMenu extends React.Component{
         }else{
             return (
                 <div className="item" style={{display: "flex", alignItems: "center", height:"100%"}}>
-                    <Link to="/">
+                    <Link to="/app/">
                         <button className="ui secondary button">
                             <i className="icon users"></i>
                             Login
                         </button>
                     </Link>
-                    <Link to="/register">
+                    <Link to="/app/register">
                         <button className="ui secondary button">
                         <i className="icon wpforms"></i>
                             Register
