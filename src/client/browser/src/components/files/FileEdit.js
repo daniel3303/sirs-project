@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { fetchFile, updateFile, createRole } from '../../actions';
 import FileForm from './FileForm';
 import FileRolesForm from './FileRolesForm';
+import FileRolesList from './FileRolesList';
 
 
 
@@ -29,7 +30,12 @@ class FileEdit extends React.Component{
         return (
             <div>
                 <FileForm initialValues={{name: this.props.file.name, content: this.props.file.content}} onSubmit={this.onFileFormSubmit}/>
-                <FileRolesForm onSubmit={this.onFileRoleFormSubmit}/>
+                <FileRolesList fileId={this.props.file.id}/>
+                { (this.props.userId === this.props.file.owner) ?
+                    <FileRolesForm onSubmit={this.onFileRoleFormSubmit}/>
+                :
+                    <div>You can't change permissions for this file because you don´t own it.</div>
+                }
                 <Link to={'/'} className="header">Return to list of files</Link>
             </div>
         );
@@ -39,7 +45,7 @@ class FileEdit extends React.Component{
 }
 
 const mapStateToProps = (state, ownProps) => {
-    return {file : state.files[ownProps.match.params.id]};
+    return {file : state.files[ownProps.match.params.id], userId: state.auth.userId };
 }
 
 export default connect(mapStateToProps, {fetchFile, updateFile, createRole})(FileEdit);

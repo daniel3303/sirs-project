@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import UserHeaderMenu from './UserHeaderMenu';
 
 const Header = () => {
   return (
@@ -8,7 +9,7 @@ const Header = () => {
         SIRS@A47
       </Link>
       <div className="right menu">
-          Sair
+          <UserHeaderMenu />
       </div>
     </div>
   );

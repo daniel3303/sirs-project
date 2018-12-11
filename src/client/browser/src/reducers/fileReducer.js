@@ -5,21 +5,25 @@ import {
     FETCH_FILE,
     UPDATE_FILE,
     CREATE_FILE,
-    CREATE_ROLE
+    CREATE_ROLE,
+    FETCH_ROLES,
 } from '../actions/types';
 
 export default (state = {}, action) => {
     switch (action.type) {
     case FETCH_FILES:
-        return { ...state, ..._.mapKeys(action.payload, 'id') };
+        return _.merge({}, state, _.mapKeys(action.payload, 'id'));
     case FETCH_FILE:
-        return { ...state, [action.payload.id]: action.payload };
+        console.log(action);
+        return _.merge({}, state, {[action.payload.id]: action.payload});
     case UPDATE_FILE:
         return { ...state };
     case CREATE_FILE:
         return { ...state };
     case CREATE_ROLE:
         return { ...state };
+    case FETCH_ROLES:
+        return _.merge({}, state, {[action.payload.fileId]: action.payload});
     default:
         return state;
     }

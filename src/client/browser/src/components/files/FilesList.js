@@ -21,7 +21,7 @@ class FilesList extends React.Component {
                         </Link>
                         <div className="description">
                             Permissions: {(file.permissions.read) ? "r" : ""}{(file.permissions.write) ? "w" : ""}
-                            { (file.owner == this.props.userId) ? <div>You own this file</div> : "" }
+                            { (file.owner == this.props.userId) ? <div>You own this file</div> : <div>You DO NOT own this file</div> }
                         </div>
                     </div>
                 </div>
