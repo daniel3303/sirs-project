@@ -14,7 +14,7 @@ class UserHeaderMenu extends React.Component{
         if(this.props.isLoggedIn){
             return (
                 <div className="item" style={{display: "flex", alignItems: "center", height:"100%"}}>
-                    <img className="ui mini circular image" src="/avatar.png" />
+                    <img className="ui mini circular image" src="/app/avatar.png" />
                     <div className="content" style={{marginLeft:"10px"}}>
                       <div className="ui sub header">{this.props.name}</div>
                       <span style={{cursor:"pointer"}} onClick={this.onLogoutClick}>Logout</span>

@@ -23,7 +23,7 @@ class FileRolesList extends React.Component{
                     <div className="right floated content">
                         <div className="ui button" onClick={() => {this.onRevokeClick(role.user.id)}}>Revoke</div>
                     </div>
-                    <img className="ui avatar image" src="/avatar.png" />
+                    <img className="ui avatar image" src="/app/avatar.png" />
                     <div className="content">
                         <span className="header">{role.user.username} ({role.user.name})</span>
                         Permissions:  {(role.read) ? "read " : ""}{(role.write) ? "write" : ""}
