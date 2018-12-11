@@ -56,8 +56,8 @@ You can also add our CA certificate (ca-certificate.crt) to your trusted roots. 
 [How to install a self signed certificate on chrome](https://stackoverflow.com/questions/7580508/getting-chrome-to-accept-self-signed-localhost-certificate?page=1&tab=votes#tab-top)
 
 # OpenSSL
-All our OpenSSL configuration is included in this repository under the folder `openssl`.
-Here is a brief explanation for the most important files in that folder.
+Our used configuration for OpenSSL is included in this repository under the folder `openssl`.
+Here is a brief explaination for the most important files in that folder.
 
 | File | Description |
 | ------ | -------------------- |
