@@ -55,8 +55,7 @@ class FileEdit extends React.Component{
     }
 
     renderFileChanged(){
-        console.log(this.props.file.changed);
-        if(this.props.fileChanged){
+        if(this.props.fileChanged && !this.props.file.corrupted){
             return (
                 <div className="ui red message">
                     <div className="header" style={{textAlign:"center"}}>
@@ -71,13 +70,31 @@ class FileEdit extends React.Component{
         return "";
     }
 
+    renderFileCorrupted(){
+        if(this.props.corrupted){
+            return (
+                <div className="ui red message">
+                    <div className="header" style={{textAlign:"center"}}>
+                        <p>This file is corrupted and because of that we can't decrypt the content.<br />
+                        Your changes will override the corrupted file.
+                        </p>
+                    </div>
+                </div>
+            );
+        }
+        return "";
+    }
+
+
     render(){
         if(!this.props.file){
             return <div>Loading...</div>;
         }
+
         return (
             <div className="ui grid centered">
                 <div className="seven wide column">
+                    {this.renderFileCorrupted()}
                     {this.renderFileChanged()}
                     <div className="ui huge header">Edit file: {this.props.file.name}</div>
                     <FileForm initialValues={{name: this.props.file.name, content: this.props.file.content}} onSubmit={this.onFileFormSubmit}/>
@@ -108,7 +125,12 @@ class FileEdit extends React.Component{
 }
 
 const mapStateToProps = (state, ownProps) => {
-    return {file : state.files[ownProps.match.params.id], userId: state.auth.userId, fileChanged: state.files[ownProps.match.params.id].changed};
+    return {
+        file : state.files[ownProps.match.params.id],
+        userId: state.auth.userId, fileChanged:
+        state.files[ownProps.match.params.id].changed,
+        corrupted: state.files[ownProps.match.params.id].corrupted
+    };
 }
 
 export default connect(mapStateToProps, {fetchFile, updateFile, createRole, checkFileChanged})(FileEdit);

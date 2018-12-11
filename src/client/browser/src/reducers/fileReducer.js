@@ -35,6 +35,7 @@ export default (state = {}, action) => {
     case FILE_CHANGED:
         var newState = {...state};
         newState[action.payload.id].changed = action.payload.changed;
+        newState[action.payload.id].corrupted = action.payload.corrupted;
         return newState;
     default:
         return state;

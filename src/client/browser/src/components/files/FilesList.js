@@ -33,7 +33,8 @@ class FilesList extends React.Component {
                         </Link>
                         <div className="description">
                             Permissions: {(file.permissions.read) ? "r" : ""}{(file.permissions.write) ? "w" : ""}
-                            { (file.owner == this.props.userId) ? <div>You own this file</div> : <div>You DO NOT own this file</div> }
+                            { (file.owner === this.props.userId) ? <div>You own this file</div> : <div>You DO NOT own this file</div> }
+                            { (file.corrupted === true) ? <div className="ui orange header" style={{fontSize: "1em"}}>This file is corrupted</div> : "" }
                         </div>
                     </div>
                 </div>

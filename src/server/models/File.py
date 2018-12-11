@@ -84,7 +84,11 @@ class File(models.Model):
 
     def decrypt(self, content):
         fernet = Fernet(self.getDecryptedKey())
-        content = fernet.decrypt(self.content).decode("utf-8")
+        try:
+            content = fernet.decrypt(self.content).decode("utf-8")
+        except Exception as ex:
+            #Corrupted File
+            return ""
         return content
 
     def getBytesForMAC(self):

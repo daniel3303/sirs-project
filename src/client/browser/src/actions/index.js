@@ -156,6 +156,7 @@ export const checkFileChanged = (id) => async (dispatch, getState) => {
     if(data.status === "success"){
         var localFile = getState().files[id];
         var changed = false;
+        var corrupted = data.file.corrupted;
 
         if(localFile.content != data.file.content || localFile.name != data.file.name){
             changed = true;
@@ -165,7 +166,8 @@ export const checkFileChanged = (id) => async (dispatch, getState) => {
                 type: FILE_CHANGED,
                 payload: {
                     id,
-                    changed
+                    changed,
+                    corrupted
                 }
         });
     }
