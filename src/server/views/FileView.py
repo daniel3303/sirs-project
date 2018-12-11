@@ -28,16 +28,29 @@ class FileView(View):
                 "message" : "Ficheiro não encontrado."
             })
         else:
+            # User permissions
+            permissions = {'read': False, 'write': False} #Default
+
+            if(user.getId() == file.getOwner().getId()):
+                permissions = {'read': True, 'write': True}
+            else:
+                for role in user.roles.all():
+                    if(role.file.getId() == file.getId()):
+                        permissions = { 'read' : role.canRead(), 'write' : role.canWrite() }
+                        break
+
             return JsonResponse({
                 "status" : "success",
                 "file" : {
                     "id" : file.getId(),
                     "name" : file.getName(),
-                    "content" : file.getContent(),
                     'owner': file.getOwner().getId(),
                     "corrupted" : file.isCorrupted(),
+                    'permissions' : permissions,
+                    "content" : file.getContent(),
                 }
             })
+
 
 
     def post(self, request, id=0):

@@ -31,13 +31,22 @@ class Login extends React.Component{
         );
     };
 
+    renderSubmitButton = () =>{
+        if(this.props.checkingLogin === true){
+            return <button className="ui button primary"><i className="notched circle loading icon button"></i> Checking credentials...</button>
+        }else{
+            return <button className="ui button primary">Login</button>
+        }
+    }
+
 
     render(){
         return (
             <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
                 <Field name="username" component={this.renderInput} label="Username" />
                 <Field name="password" component={this.renderInput} label="Password" />
-                <button className="ui button primary">Login</button>
+                { this.renderSubmitButton() }
+                { (this.props.triedLogin && !this.props.isLoggedIn) ? (<p className="ui red header">Login failed!</p>) : ""}
             </form>
 
         );
@@ -58,7 +67,15 @@ const validate = formValues => {
     return errors;
 };
 
-export default connect(null, { login })(reduxForm({
+const mapStateToProps = (state, ownProps) => {
+    return {
+        triedLogin: state.auth.triedLogin,
+        isLoggedIn: state.auth.isLoggedIn,
+        checkingLogin: state.auth.checkingLogin
+    }
+}
+
+export default connect(mapStateToProps, { login })(reduxForm({
     form: 'loginForm',
     validate
 })(Login));

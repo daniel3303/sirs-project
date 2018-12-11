@@ -41,5 +41,11 @@ class FileCreateView(View):
                     'file' : {
                         'id' : file.getId(),
                         'name' : file.getName(),
+                        'owner' : file.getOwner().getId(),
+                        "corrupted" : file.isCorrupted(),
+                        'permissions' : {
+                            'read' : True,
+                            'write' : True,
+                        },
                     }
                 })
