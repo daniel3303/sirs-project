@@ -21,7 +21,7 @@ class FileRolesList extends React.Component{
     }
 
     render = () => {
-        if(this.props.fileId != this.props.userId){
+        if(this.props.file.userId != this.props.userId){
             return <div>You can´t see the roles for this file because you don't own it.</div>
         }
 
