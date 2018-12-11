@@ -1,7 +1,7 @@
 # sirs-project
 Projecto de Segurança Informática em Redes e Sistemas
 
-O certificado (.pem) é uma chave RSA de 4096bits. A chave de desencriptação é:
+O certificado (.pem) é uma chave RSA de 8192bits. A chave de desencriptação é:
 8M@!Sa#XA&4A7PJF
 
 
@@ -18,10 +18,11 @@ O certificado (.pem) é uma chave RSA de 4096bits. A chave de desencriptação �
 
 # Installation
 ``` ssh
-$ python3 manager.py makemigrations
-$ python3 manager.py migrate
-$ python3 manager.py migrate --database=replica1
-$ python3 manager.py migrate --database=replica2
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+$ python3 manage.py migrate --database=replica1
+$ python3 manage.py migrate --database=replica2
+$ python3 manage.py collectstatic
 $ python3 manage.py runsslserver --certificate cert.pem --key key.pem
 ```
 

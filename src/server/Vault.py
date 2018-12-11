@@ -16,7 +16,7 @@ class Vault:
         if Vault.certificate is not None:
             return Vault.certificate
         else:
-            with open("cert.pem", "rb") as certificateFile:
+            with open("certificates/db-cert.pem", "rb") as certificateFile:
                 Vault.certificate = x509.load_pem_x509_certificate(certificateFile.read(), default_backend())
 
             return Vault.certificate
@@ -24,7 +24,7 @@ class Vault:
     @staticmethod
     def getPrivateKey():
         if Vault.privateKey is None:
-            with open("key.pem", "rb") as privateKeyFile:
+            with open("certificates/db-key.pem", "rb") as privateKeyFile:
                 Vault.privateKey = serialization.load_pem_private_key(
                     privateKeyFile.read(),
                     password=b"8M@!Sa#XA&4A7PJF", #FIXME dynamically ask
