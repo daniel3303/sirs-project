@@ -11,7 +11,7 @@ class FilesList extends React.Component {
         this.props.fetchFiles();
         this.interval = setInterval(() => {
             this.props.fetchFiles()
-        }, 3000);
+        }, 2000);
     }
 
     componentWillUnmount() {

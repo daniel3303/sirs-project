@@ -14,9 +14,8 @@ import {
 export default (state = {}, action) => {
     switch (action.type) {
     case FETCH_FILES:
-        return _.merge({}, state, _.mapKeys(action.payload, 'id'));
+        return {..._.mapKeys(action.payload, 'id')};
     case FETCH_FILE:
-        console.log(action);
         return _.merge({}, state, {[action.payload.id]: action.payload});
     case UPDATE_FILE:
         return { ...state };
