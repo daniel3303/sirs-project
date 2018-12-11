@@ -75,7 +75,7 @@ class FileEdit extends React.Component{
             return (
                 <div className="ui red message">
                     <div className="header" style={{textAlign:"center"}}>
-                        <p>This file is corrupted and because of that we can't decrypt the content.<br />
+                        <p>This file is corrupted and because of that the content may have been changed.<br />
                         Your changes will override the corrupted file.
                         </p>
                     </div>
