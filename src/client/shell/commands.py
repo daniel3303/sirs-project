@@ -511,3 +511,36 @@ def list_users(urlbase, sess, params):
                 user['name'],
                 sep='|'
             )
+
+def check_credentials_validity(urlbase, sess, params):
+    if 'username' not in params:
+        print('Argument "username" expected for command Check Credentials Validity')
+        return
+
+    if 'password' not in params:
+        print('Argument "password" expected for command Check Credentials Validity')
+        return False
+
+    req = {
+        'username': params['username'],
+        'password': params['password']
+    }
+
+    url = urljoin(urlbase, LIST_USERS)
+    reqjson = json.dumps(req)
+
+    res = sess.post(url, data=reqjson)
+
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return False
+
+    resjson = res.json()
+
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return False
+
+    print(resjson['message'])
+
+    return True
