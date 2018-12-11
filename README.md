@@ -1,7 +1,7 @@
 # sirs-project
 Projecto de Segurança Informática em Redes e Sistemas
 
-O certificado (.pem) é uma chave RSA de 16384bits. A chave de desencriptação é:
+O certificado (.pem) é uma chave RSA de 8192bits. A chave de desencriptação é:
 8M@!Sa#XA&4A7PJF
 
 
