@@ -17,9 +17,10 @@ class FileCreateView(View):
         bodyUnicode = request.body.decode('utf-8')
         jsonRequestData = json.loads(bodyUnicode)
 
-        fileName = jsonRequestData["name"]
-        username = jsonRequestData["username"]
-        password =jsonRequestData["password"]
+        fileName = jsonRequestData.get("name", "")
+        fileContent = jsonRequestData.get("content", "")
+        username = jsonRequestData.get("username", "")
+        password =jsonRequestData.get("password", "")
 
         # Check user authentication
         user = authenticate(username=username, password=password)
@@ -29,6 +30,7 @@ class FileCreateView(View):
 
         file = File()
         file.setName(fileName)
+        file.setContent(fileContent)
         file.setOwner(user)
 
         try:
