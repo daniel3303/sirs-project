@@ -15,10 +15,26 @@ class FileEdit extends React.Component{
 
     componentWillMount(){
         this.props.fetchFile(this.props.match.params.id);
-        this.interval = setInterval(() => {
-            this.props.checkFileChanged(this.props.match.params.id);
-        }, 2000);
+        this.startFileMonitoring();
     }
+
+    startFileMonitoring = () => {
+        if(this.interval == null){
+            this.interval = setInterval(() => {
+                this.props.checkFileChanged(this.props.match.params.id);
+            }, 2000);
+        }
+    }
+
+    stopFileMonitoring = () =>{
+        if(this.interval != null){
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+    }
+
+
+
 
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -26,6 +42,8 @@ class FileEdit extends React.Component{
 
     onFileFormSubmit = (formValues) => {
         this.props.updateFile(this.props.match.params.id, formValues);
+        this.stopFileMonitoring();
+        setTimeout(this.startFileMonitoring, 2000); //Not so good
     }
 
     onFileRoleFormSubmit = (formValues) => {

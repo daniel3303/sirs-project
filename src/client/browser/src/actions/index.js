@@ -61,12 +61,14 @@ export const fetchFiles = () => async (dispatch, getState) => {
 
 
 export const fetchFile = (id) => async (dispatch, getState) => {
-    const response = await sirs.get(`/files/${id}`, {params: { username: getState().auth.username, password: getState().auth.password }});
+    const {data} = await sirs.get(`/files/${id}`, {params: { username: getState().auth.username, password: getState().auth.password }});
 
-    dispatch({
-            type: FETCH_FILE,
-            payload: response.data.file
-    });
+    if(data.status === "success"){
+        dispatch({
+                type: FETCH_FILE,
+                payload: data.file
+        });
+    }
 };
 
 export const updateFile = (id, newValues) => async (dispatch, getState) => {
@@ -151,18 +153,20 @@ export const revokeRole = (fileId, userId) => async (dispatch, getState) => {
 export const checkFileChanged = (id) => async (dispatch, getState) => {
     const {data} = await sirs.get(`/files/${id}`, {params: { username: getState().auth.username, password: getState().auth.password }});
 
-    var localFile = getState().files[id];
-    var changed = false;
+    if(data.status === "success"){
+        var localFile = getState().files[id];
+        var changed = false;
 
-    if(localFile.content != data.file.content || localFile.name != data.file.name){
-        changed = true;
+        if(localFile.content != data.file.content || localFile.name != data.file.name){
+            changed = true;
+        }
+
+        dispatch({
+                type: FILE_CHANGED,
+                payload: {
+                    id,
+                    changed
+                }
+        });
     }
-
-    dispatch({
-            type: FILE_CHANGED,
-            payload: {
-                id,
-                changed
-            }
-    });
 }
