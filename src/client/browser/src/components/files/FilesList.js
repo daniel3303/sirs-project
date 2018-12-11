@@ -6,8 +6,16 @@ import { fetchFiles } from '../../actions';
 import FileCreate from './FileCreate';
 
 class FilesList extends React.Component {
+    interval = null;
     componentDidMount() {
         this.props.fetchFiles();
+        this.interval = setInterval(() => {
+            this.props.fetchFiles()
+        }, 3000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     renderList(){
