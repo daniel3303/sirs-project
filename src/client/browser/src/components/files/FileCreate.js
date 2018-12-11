@@ -15,7 +15,7 @@ class FileCreate extends React.Component{
     render(){
         return (
             <div>
-                <h4>Create new file</h4>
+                <div className="ui huge header">Create a new file</div>
                 <FileForm  onSubmit={this.onSubmit}/>
             </div>
         );

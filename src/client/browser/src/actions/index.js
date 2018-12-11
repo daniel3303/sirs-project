@@ -15,6 +15,7 @@ import{
     FETCH_USERS,
     CREATE_ROLE,
     FETCH_ROLES,
+    REVOKE_ROLE
 }  from "./types";
 
 export const login = (username, password) => async (dispatch, getState) => {
@@ -102,6 +103,8 @@ export const createRole = (fileId, values) => async (dispatch, getState) => {
     dispatch({
             type: CREATE_ROLE,
     });
+
+    dispatch(fetchRoles(fileId));
 }
 
 
@@ -114,6 +117,27 @@ export const fetchRoles = (fileId) => async (dispatch, getState) => {
             fileId,
             roles: data.roles
         }
-    })
+    });
+
+}
+
+export const revokeRole = (fileId, userId) => async (dispatch, getState) => {
+    var params = {
+        username: getState().auth.username,
+        password: getState().auth.password,
+        userId,
+        read: false,
+        write: false
+    }
+    const {data} = await sirs.post(`/files/${fileId}/roles`, params);
+
+    dispatch({
+        type: REVOKE_ROLE,
+        payload: {
+            fileId
+        }
+    });
+
+    dispatch(fetchRoles(fileId));
 
 }

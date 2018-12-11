@@ -68,8 +68,8 @@ class FileRolesView(View):
         else:
             canWrite = False
 
-        username = jsonRequestData["username"]
-        password =jsonRequestData["password"]
+        username = jsonRequestData.get("username", "")
+        password =jsonRequestData.get("password", "")
 
         # Check user authentication
         user = authenticate(username=username, password=password)

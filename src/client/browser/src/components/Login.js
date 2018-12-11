@@ -44,14 +44,20 @@ class Login extends React.Component{
 
     render(){
         return (
-            <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
-                <Field name="username" component={this.renderInput} label="Username" />
-                <Field name="password" component={this.renderInput} label="Password" />
-                { this.renderSubmitButton() }
-                { (this.props.triedLogin && !this.props.isLoggedIn) ? (<p className="ui red header">Login failed!</p>) : ""}
-                <Link to="/register" className="header">Don´t have an account? Click here to create one</Link>
-            </form>
-
+            <div className="ui grid centered">
+                <div className="seven wide column">
+                    <div className="ui huge header centered">Login into your account</div>
+                    <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
+                        <Field name="username" component={this.renderInput} label="Username" />
+                        <Field name="password" component={this.renderInput} label="Password" />
+                        <div style={{display: "flex", justifyContent: "space-between", alignItems:"center"}}>
+                        <div>{ this.renderSubmitButton() }</div>
+                        <div><Link to="/register" className="header">Create a new account</Link></div>
+                        </div>
+                    </form>
+                    { (this.props.triedLogin && !this.props.isLoggedIn) ? (<p className="ui red header">Login failed!</p>) : ""}
+                </div>
+            </div>
         );
     }
 }

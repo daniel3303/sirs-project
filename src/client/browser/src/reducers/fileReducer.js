@@ -7,6 +7,8 @@ import {
     CREATE_FILE,
     CREATE_ROLE,
     FETCH_ROLES,
+    REVOKE_ROLE,
+    USER_LOGOUT,
 } from '../actions/types';
 
 export default (state = {}, action) => {
@@ -23,7 +25,13 @@ export default (state = {}, action) => {
     case CREATE_ROLE:
         return { ...state };
     case FETCH_ROLES:
-        return _.merge({}, state, {[action.payload.fileId]: action.payload});
+        var newState = {...state};
+        newState[action.payload.fileId].roles = action.payload.roles
+        return newState;
+    case REVOKE_ROLE:
+        return { ...state };
+    case USER_LOGOUT:
+        return {};
     default:
         return state;
     }

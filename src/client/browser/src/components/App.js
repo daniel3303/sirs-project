@@ -43,12 +43,12 @@ class App extends React.Component {
     render() {
         return (
             <BrowserRouter>
-                <div>
+                <React.Fragment>
                     <Header />
                     <Switch>
                         { (this.props.isLoggedIn) ? this.renderLoggedInRoutes() : this.renderLoggedOutRoutes() }
                     </Switch>
-                </div>
+                </React.Fragment>
             </BrowserRouter>
         );
     };

@@ -11,6 +11,10 @@ class FilesList extends React.Component {
     }
 
     renderList(){
+        if(this.props.files.length == 0){
+            return <div>You have no files!</div>;
+        }
+
         return this.props.files.map(file => {
             return (
                 <div className="item" key={file.id}>
@@ -31,11 +35,15 @@ class FilesList extends React.Component {
 
     render() {
             return (
-            <div>
-                <h2>File list</h2>
-                <div className="ui celled list">{this.renderList()}</div>
-                <FileCreate />
-            </div>
+                <div className="ui grid centered">
+                    <div className="seven wide column">
+                        <div className="ui huge header">List of files {(this.props.files.length > 0) ? "("+this.props.files.length+")" : ""}</div>
+                        <div className="ui celled list">{this.renderList()}</div>
+                    </div>
+                    <div className="five wide column">
+                        <FileCreate />
+                    </div>
+                </div>
         );
     }
 }

@@ -12,3 +12,4 @@ export const CREATE_FILE = "CREATE_FILE";
 export const FETCH_USERS = "FETCH_USERS";
 export const CREATE_ROLE = "CREATE_ROLE";
 export const FETCH_ROLES = "FETCH_ROLES";
+export const REVOKE_ROLE = "REVOKE_ROLE";

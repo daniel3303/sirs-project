@@ -44,14 +44,7 @@ export default (state = INITIAL_STATE, action) => {
                         triedLogin: true
             };
         case USER_LOGOUT:
-            return { ...state,
-                isLoggedIn: false,
-                userId: null,
-                username: "",
-                name: "",
-                checkingLogin: false,
-                triedLogin: false
-            };
+            return { ...INITIAL_STATE };
 
         case USER_REGISTER:
             return { ...state, checkingRegister: true };

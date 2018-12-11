@@ -48,15 +48,21 @@ class Register extends React.Component{
         }
 
         return (
-            <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
-                <Field name="name" component={this.renderInput} label="Name" />
-                <Field name="username" component={this.renderInput} label="Username" />
-                <Field name="password" component={this.renderInput} label="Password" />
-                { this.renderSubmitButton() }
+        <div className="ui grid centered">
+            <div className="seven wide column">
+                <div class="ui huge header centered">Create a new account</div>
+                <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
+                    <Field name="name" component={this.renderInput} label="Name" />
+                    <Field name="username" component={this.renderInput} label="Username" />
+                    <Field name="password" component={this.renderInput} label="Password" />
+                    <div style={{display: "flex", justifyContent: "space-between", alignItems:"center"}}>
+                        { this.renderSubmitButton() }
+                        <Link to="/" className="header">Login into your account</Link>
+                    </div>
+                </form>
                 { (this.props.registerFailedMessage) ? (<p className="ui red header">{ this.props.registerFailedMessage }</p>) : ""}
-                <Link to="/" className="header">Already have an account? Click here to login</Link>
-            </form>
-
+            </div>
+        </div>
         );
     }
 }

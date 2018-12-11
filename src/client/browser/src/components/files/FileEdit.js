@@ -28,15 +28,29 @@ class FileEdit extends React.Component{
         }
 
         return (
-            <div>
-                <FileForm initialValues={{name: this.props.file.name, content: this.props.file.content}} onSubmit={this.onFileFormSubmit}/>
-                <FileRolesList fileId={this.props.file.id}/>
-                { (this.props.userId === this.props.file.owner) ?
-                    <FileRolesForm onSubmit={this.onFileRoleFormSubmit}/>
-                :
-                    <div>You can't change permissions for this file because you don´t own it.</div>
-                }
-                <Link to={'/'} className="header">Return to list of files</Link>
+            <div className="ui grid centered">
+                <div className="seven wide column">
+                    <div className="ui huge header">Edit file: {this.props.file.name}</div>
+                    <FileForm initialValues={{name: this.props.file.name, content: this.props.file.content}} onSubmit={this.onFileFormSubmit}/>
+                    <br />
+                    <Link to={'/'} className="header">
+                    <button className="ui labeled icon button">
+                        <i className="chevron left icon"></i>
+                        Return to list of files
+                    </button>
+                    </Link>
+                </div>
+                <div className="five wide column">
+                    <div className="ui huge header">Roles to this file</div>
+                    <FileRolesList fileId={this.props.file.id}/>
+
+                    <div className="ui huge header">Edit file roles</div>
+                    { (this.props.userId === this.props.file.owner) ?
+                        <FileRolesForm onSubmit={this.onFileRoleFormSubmit}/>
+                    :
+                        <div>You can't change permissions for this file because you don´t own it.</div>
+                    }
+                </div>
             </div>
         );
     }

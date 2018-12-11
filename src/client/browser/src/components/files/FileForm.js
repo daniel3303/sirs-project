@@ -24,8 +24,20 @@ class FileForm extends React.Component{
         );
     };
 
+    renderTextareaInput = ({ input, label, meta }) => {
+        const className = `field ${meta.error && meta.touched ? 'error' : ''}`;
+        return (
+            <div className={className}>
+                <label>{label}</label>
+                <textarea {...input} autoComplete="off"></textarea>
+                {this.renderError(meta)}
+            </div>
+        );
+    };
+
     onSubmit = formValues => {
         this.props.onSubmit(formValues);
+        this.props.reset();
     };
 
     render() {
@@ -35,7 +47,7 @@ class FileForm extends React.Component{
                 className="ui form error"
             >
                 <Field name="name" component={this.renderInput} label="File's name" />
-                <Field name="content" component={this.renderInput} label="File's content" />
+                <Field name="content" component={this.renderTextareaInput} label="File's content" />
                 <button className="ui button primary">Save</button>
             </form>
         );
