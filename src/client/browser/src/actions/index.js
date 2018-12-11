@@ -11,7 +11,9 @@ import{
     FETCH_FILES,
     FETCH_FILE,
     UPDATE_FILE,
-    CREATE_FILE
+    CREATE_FILE,
+    FETCH_USERS,
+    CREATE_ROLE
 }  from "./types";
 
 export const login = (username, password) => async (dispatch, getState) => {
@@ -82,4 +84,23 @@ export const createFile = (values) => async (dispatch, getState) => {
     })
 
     dispatch(fetchFile(response.data.file.id));
+}
+
+export const fetchUsers = () => async (dispatch, getState) => {
+    const response = await sirs.get('/users', {params: { username: getState().auth.username, password: getState().auth.password }});
+
+    dispatch({
+            type: FETCH_USERS,
+            payload: response.data.users
+    });
+};
+
+export const createRole = (fileId, values) => async (dispatch, getState) => {
+    const response = await sirs.post(`/files/${fileId}/roles`, {...values, username: getState().auth.username, password: getState().auth.password });
+    console.log(values);
+    dispatch({
+            type: CREATE_ROLE,
+    });
+
+
 }

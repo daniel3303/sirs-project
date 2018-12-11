@@ -4,7 +4,8 @@ import {
     FETCH_FILES,
     FETCH_FILE,
     UPDATE_FILE,
-    CREATE_FILE
+    CREATE_FILE,
+    CREATE_ROLE
 } from '../actions/types';
 
 export default (state = {}, action) => {
@@ -16,6 +17,8 @@ export default (state = {}, action) => {
     case UPDATE_FILE:
         return { ...state };
     case CREATE_FILE:
+        return { ...state };
+    case CREATE_ROLE:
         return { ...state };
     default:
         return state;

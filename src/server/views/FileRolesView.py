@@ -56,7 +56,17 @@ class FileRolesView(View):
 
         targetUserId = jsonRequestData.get("userId", 0)
         canRead = jsonRequestData.get("read", False)
+        if(canRead == "true" or canRead == True or canRead == "True"):
+            canRead = True
+        else:
+            canRead = False
+
+
         canWrite = jsonRequestData.get("write", False)
+        if(canWrite == "true" or canWrite == True or canWrite == "True"):
+            canWrite = True
+        else:
+            canWrite = False
 
         username = jsonRequestData["username"]
         password =jsonRequestData["password"]

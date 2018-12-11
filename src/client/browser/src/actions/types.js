@@ -9,3 +9,5 @@ export const FETCH_FILES = "FETCH_FILES";
 export const FETCH_FILE = "FETCH_FILE";
 export const UPDATE_FILE = "UPDATE_FILE";
 export const CREATE_FILE = "CREATE_FILE";
+export const FETCH_USERS = "FETCH_USERS";
+export const CREATE_ROLE = "CREATE_ROLE";
