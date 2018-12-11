@@ -52,21 +52,27 @@ def getoptions(param):
     return {**rs, **rrs}
 
 
-def authenticate(sess, opts):
+def authenticate(url, sess, opts):
     username = opts.get('u') or opts.get('username')
     password = opts.get('p') or opts.get('password')
-    sess.auth = username, password
 
-    if username is None:
-        print('You\'re not authenticated')
+    if username is not None and password is not None:
+        params = {'username': username, 'password': password}
+
+        valid = check_credentials_validity(url, sess, params)
+        if valid:
+            sess.auth = username, password
+            return
     else:
-        print('Authenticated Configured as %s' % username)
+        print('You\'re not authenticated')
+
+    sess.auth = None, None
 
 
 def sessionconfig(sess, config, opts):
     cert = config['cert']
     sess.verify = cert
-    authenticate(sess, opts)
+    authenticate(opts['url'], sess, opts)
 
 
 def commandshelp():
@@ -137,7 +143,7 @@ cmdprocessors = {
     'create': create,
     'change': change,
     'delete': delete,
-    'login': lambda url, sess, opt: authenticate(sess, opt),
+    'login': authenticate,
     'check': check_permissions,
     'manage': manage_permissions,
     'users': list_users,
@@ -222,6 +228,7 @@ def main(args):
 
     with requests.Session() as session:
         options = getoptions(args[1:])
+        options['url'] = url
 
         sessionconfig(session, config, options)
 
