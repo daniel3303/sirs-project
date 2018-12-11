@@ -196,16 +196,16 @@ def register_user(urlbase, sess, params):
     url = urljoin(urlbase, REGISTER_USER_RESOURCE)
     reqjson = json.dumps(req)
 
-    with sess.post(url, data=reqjson) as res:
-        if res.status_code != 200:
-            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
-            return
+    res = sess.post(url, data=reqjson)
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
 
-        resjosn = res.json()
+    resjosn = res.json()
 
-        if resjosn['status'] != 'success':
-            print(resjosn['message'], file=stderr)
-            return
+    if resjosn['status'] != 'success':
+        print(resjosn['message'], file=stderr)
+        return
 
     print('User created with success')
 
@@ -346,34 +346,34 @@ def ls(urlbase, sess, params):
         'password': sess.auth[1],
     }
 
-    with sess.get(url, params=reqparams) as res:
+    res = sess.get(url, params=reqparams)
 
-        if res.status_code != 200:
-            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
-            return
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
 
-        resjson = res.json()
+    resjson = res.json()
 
-        if resjson['status'] != 'success':
-            print(resjson['message'], file=stderr)
-            return
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
 
-        files = resjson['files']
-        if len(files) == 0:
-            print('You don\'t have access to any file')
-            return
+    files = resjson['files']
+    if len(files) == 0:
+        print('You don\'t have access to any file')
+        return
 
-        print('id', 'name', 'owner id', 'corrupted', 'read permission', 'write permission', sep='|')
-        for f in files:
-            print(
-                f['id'],
-                f['name'],
-                f['owner'],
-                f['corrupted'],
-                f['permissions']['read'],
-                f['permissions']['write']
-                , sep='|'
-            )
+    print('id', 'name', 'owner id', 'corrupted', 'read permission', 'write permission', sep='|')
+    for f in files:
+        print(
+            f['id'],
+            f['name'],
+            f['owner'],
+            f['corrupted'],
+            f['permissions']['read'],
+            f['permissions']['write']
+            , sep='|'
+        )
 
 
 def delete(urlbase, sess, params):
@@ -418,33 +418,33 @@ def check_permissions(urlbase, sess, params):
         'password': sess.auth[1],
     }
 
-    with sess.get(url, params=reqparams) as res:
-        if res.status_code != 200:
-            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
-            return
+    res = sess.get(url, params=reqparams)
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
 
-        resjson = res.json()
+    resjson = res.json()
 
-        if resjson['status'] != 'success':
-            print(resjson['message'], file=stderr)
-            return
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
 
-        roles = resjson['roles']
-        if len(roles) == 0:
-            print('You didn\'t gave permissions over this file to anyone')
-            return
+    roles = resjson['roles']
+    if len(roles) == 0:
+        print('You didn\'t gave permissions over this file to anyone')
+        return
 
-        print('id', 'username', 'name', 'read permission', 'write permission', sep='|')
-        for r in roles:
-            user = r['user']
-            print(
-                user['id'],
-                user['username'],
-                user['name'],
-                r['read'],
-                r['write'],
-                sep='|'
-            )
+    print('id', 'username', 'name', 'read permission', 'write permission', sep='|')
+    for r in roles:
+        user = r['user']
+        print(
+            user['id'],
+            user['username'],
+            user['name'],
+            r['read'],
+            r['write'],
+            sep='|'
+        )
 
 
 def manage_permissions(urlbase, sess, params):
@@ -487,30 +487,30 @@ def manage_permissions(urlbase, sess, params):
 def list_users(urlbase, sess, params):
     url = urljoin(urlbase, LIST_USERS)
 
-    with sess.get(url) as res:
-        if res.status_code != 200:
-            print('There was a problem during the request (status', res.status_code, ')', file=stderr)
-            return
+    res = sess.get(url)
+    if res.status_code != 200:
+        print('There was a problem during the request (status', res.status_code, ')', file=stderr)
+        return
 
-        resjson = res.json()
+    resjson = res.json()
 
-        if resjson['status'] != 'success':
-            print(resjson['message'], file=stderr)
-            return
+    if resjson['status'] != 'success':
+        print(resjson['message'], file=stderr)
+        return
 
-        users = resjson['users']
-        if len(users) == 0:
-            print('There aren\'t any User registered in the system')
-            return
+    users = resjson['users']
+    if len(users) == 0:
+        print('There aren\'t any User registered in the system')
+        return
 
-        print('id', 'username', 'name', sep='|')
-        for user in users:
-            print(
-                user['id'],
-                user['username'],
-                user['name'],
-                sep='|'
-            )
+    print('id', 'username', 'name', sep='|')
+    for user in users:
+        print(
+            user['id'],
+            user['username'],
+            user['name'],
+            sep='|'
+        )
 
 def check_credentials_validity(urlbase, sess, params):
     if 'username' not in params:
