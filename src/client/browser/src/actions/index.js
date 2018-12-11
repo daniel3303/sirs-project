@@ -15,7 +15,8 @@ import{
     FETCH_USERS,
     CREATE_ROLE,
     FETCH_ROLES,
-    REVOKE_ROLE
+    REVOKE_ROLE,
+    FILE_CHANGED
 }  from "./types";
 
 export const login = (username, password) => async (dispatch, getState) => {
@@ -69,12 +70,17 @@ export const fetchFile = (id) => async (dispatch, getState) => {
 };
 
 export const updateFile = (id, newValues) => async (dispatch, getState) => {
-    const response = await sirs.post(`/files/${id}`, {...newValues, username: getState().auth.username, password: getState().auth.password });
+    const {data} = await sirs.post(`/files/${id}`, {...newValues, username: getState().auth.username, password: getState().auth.password });
 
-    dispatch({
-        type: UPDATE_FILE
-    });
-    dispatch(fetchFile(id));
+    if(data.status === "success"){
+        dispatch({
+            type: UPDATE_FILE,
+            payload: {...newValues, id}
+        });
+        dispatch(fetchFile(id));
+    }
+
+
 };
 
 
@@ -140,4 +146,23 @@ export const revokeRole = (fileId, userId) => async (dispatch, getState) => {
 
     dispatch(fetchRoles(fileId));
 
+}
+
+export const checkFileChanged = (id) => async (dispatch, getState) => {
+    const {data} = await sirs.get(`/files/${id}`, {params: { username: getState().auth.username, password: getState().auth.password }});
+
+    var localFile = getState().files[id];
+    var changed = false;
+
+    if(localFile.content != data.file.content || localFile.name != data.file.name){
+        changed = true;
+    }
+
+    dispatch({
+            type: FILE_CHANGED,
+            payload: {
+                id,
+                changed
+            }
+    });
 }

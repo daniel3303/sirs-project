@@ -9,6 +9,7 @@ import {
     FETCH_ROLES,
     REVOKE_ROLE,
     USER_LOGOUT,
+    FILE_CHANGED,
 } from '../actions/types';
 
 export default (state = {}, action) => {
@@ -16,9 +17,9 @@ export default (state = {}, action) => {
     case FETCH_FILES:
         return {..._.mapKeys(action.payload, 'id')};
     case FETCH_FILE:
-        return _.merge({}, state, {[action.payload.id]: action.payload});
+        return _.merge({}, state, {[action.payload.id]: {...action.payload, changed: false});
     case UPDATE_FILE:
-        return { ...state };
+        return _.merge({}, state, {[action.payload.id]: action.payload});
     case CREATE_FILE:
         return { ...state };
     case CREATE_ROLE:
@@ -31,6 +32,10 @@ export default (state = {}, action) => {
         return { ...state };
     case USER_LOGOUT:
         return {};
+    case FILE_CHANGED:
+        var newState = {...state};
+        newState[action.payload.id].changed = action.payload.changed;
+        return newState;
     default:
         return state;
     }

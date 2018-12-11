@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { fetchFile, updateFile, createRole } from '../../actions';
+import { fetchFile, updateFile, createRole, checkFileChanged } from '../../actions';
 import FileForm from './FileForm';
 import FileRolesForm from './FileRolesForm';
 import FileRolesList from './FileRolesList';
@@ -10,8 +10,18 @@ import FileRolesList from './FileRolesList';
 
 
 class FileEdit extends React.Component{
+    interval = null;
+
+
     componentWillMount(){
         this.props.fetchFile(this.props.match.params.id);
+        this.interval = setInterval(() => {
+            this.props.checkFileChanged(this.props.match.params.id);
+        }, 2000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     onFileFormSubmit = (formValues) => {
@@ -22,14 +32,35 @@ class FileEdit extends React.Component{
         this.props.createRole(this.props.match.params.id, formValues);
     }
 
+    refetchFile = () => {
+        this.props.fetchFile(this.props.match.params.id);
+    }
+
+    renderFileChanged(){
+        console.log(this.props.file.changed);
+        if(this.props.fileChanged){
+            return (
+                <div className="ui red message">
+                    <div className="header" style={{textAlign:"center"}}>
+                        <p>Seems like this file was updated by someone else.</p>
+                        <button className="ui button" onClick={this.refetchFile}>
+                            <i className="sync icon"></i> Reload file
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+        return "";
+    }
+
     render(){
         if(!this.props.file){
             return <div>Loading...</div>;
         }
-
         return (
             <div className="ui grid centered">
                 <div className="seven wide column">
+                    {this.renderFileChanged()}
                     <div className="ui huge header">Edit file: {this.props.file.name}</div>
                     <FileForm initialValues={{name: this.props.file.name, content: this.props.file.content}} onSubmit={this.onFileFormSubmit}/>
                     <br />
@@ -59,7 +90,7 @@ class FileEdit extends React.Component{
 }
 
 const mapStateToProps = (state, ownProps) => {
-    return {file : state.files[ownProps.match.params.id], userId: state.auth.userId };
+    return {file : state.files[ownProps.match.params.id], userId: state.auth.userId, fileChanged: state.files[ownProps.match.params.id].changed};
 }
 
-export default connect(mapStateToProps, {fetchFile, updateFile, createRole})(FileEdit);
+export default connect(mapStateToProps, {fetchFile, updateFile, createRole, checkFileChanged})(FileEdit);

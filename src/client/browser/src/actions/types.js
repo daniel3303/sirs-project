@@ -7,6 +7,7 @@ export const USER_REGISTER_SUCCESS = "USER_REGISTER_SUCCESS";
 export const USER_REGISTER_FAILED = "USER_REGISTER_FAILED";
 export const FETCH_FILES = "FETCH_FILES";
 export const FETCH_FILE = "FETCH_FILE";
+export const FILE_CHANGED = "FILE_CHANGED";
 export const UPDATE_FILE = "UPDATE_FILE";
 export const CREATE_FILE = "CREATE_FILE";
 export const FETCH_USERS = "FETCH_USERS";

@@ -71,5 +71,6 @@ const validate = formValues => {
 
 export default reduxForm({
     form: 'fileForm',
-    validate
+    validate,
+    enableReinitialize: true
 })(FileForm);

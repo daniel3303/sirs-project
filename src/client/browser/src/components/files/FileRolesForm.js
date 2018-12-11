@@ -104,5 +104,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {fetchUsers})(reduxForm({
     form: 'fileRolesForm',
-    validate
+    validate,
+    enableReinitialize: true
 })(FileRolesForm));
