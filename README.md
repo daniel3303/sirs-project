@@ -17,13 +17,19 @@ O certificado (.pem) é uma chave RSA de 8192bits. A chave de desencriptação �
 
 
 # Installation
+To install the software execute the following commands (you must be in the folder src):
 ``` ssh
 $ python3 manage.py makemigrations
 $ python3 manage.py migrate
 $ python3 manage.py migrate --database=replica1
 $ python3 manage.py migrate --database=replica2
 $ python3 manage.py collectstatic
-$ python3 manage.py runsslserver --certificate certificates/https-cert.pem --key certificates/https-key.pem
+```
+
+or optinally:
+
+``` ssh
+$ ./install.sh
 ```
 
 
@@ -32,9 +38,17 @@ The command `$ python3 manager.py migrate --database=<replica_name>` must be app
 
 
 # How to run
+To run the software execute the following commands:
 ``` ssh
-$ python3 manage.py runsslserver --certificate cert.pem --key key.pem
+$ python3 manage.py runsslserver --certificate certificates/https-cert.pem --key certificates/https-key.pem
 ```
+
+or optinally:
+
+``` ssh
+$ ./run.sh
+```
+
 
 The webapp will be available at https://localhost:8000/app/index.html (you must include the index.html part).
 
