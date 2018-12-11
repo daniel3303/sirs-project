@@ -2,7 +2,7 @@
 SIRS Project - GROUP A43
 
 In this repository we include our CA, OpenSSL configurations and self-signed certificates for localhost.
-The key to decrypt our db-key.pem RSA private key is: @!Sa#XA&4A7PJF
+The key to decrypt our db-key.pem RSA private key is: `@!Sa#XA&4A7PJF`
 
 
 # Depencencies
