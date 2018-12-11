@@ -1,6 +1,19 @@
-import { USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILED, USER_LOGIN_SUCCESS } from '../actions/types';
+import {
+    USER_LOGIN,
+    USER_LOGOUT,
+    USER_LOGIN_FAILED,
+    USER_LOGIN_SUCCESS,
+    USER_REGISTER,
+    USER_REGISTER_SUCCESS,
+    USER_REGISTER_FAILED,
+} from '../actions/types';
 
 const INITIAL_STATE = {
+    checkingRegister: false,
+    registeredSuccess: null,
+    loggedFromRegister: false,
+    registerFailedMessage: "",
+
     checkingLogin: false,
     triedLogin: false,
     isLoggedIn: false,
@@ -21,6 +34,7 @@ export default (state = INITIAL_STATE, action) => {
                         username: action.payload.username,
                         password: action.payload.password,
                         name: action.payload.name,
+                        loggedFromRegister: action.payload.loggedFromRegister,
                         checkingLogin: false,
                         triedLogin: true
                      };
@@ -37,8 +51,17 @@ export default (state = INITIAL_STATE, action) => {
                 name: "",
                 checkingLogin: false,
                 triedLogin: false
-
             };
+
+        case USER_REGISTER:
+            return { ...state, checkingRegister: true };
+
+        case USER_REGISTER_SUCCESS:
+            return { ...state, checkingRegister: false, registeredSuccess: true }
+
+        case USER_REGISTER_FAILED:
+            return { ...state, registerFailedMessage: action.payload, checkingRegister: false }
+
         default:
             return state;
     }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { Link } from 'react-router-dom';
+
 import { login } from '../actions';
 
 
@@ -47,6 +49,7 @@ class Login extends React.Component{
                 <Field name="password" component={this.renderInput} label="Password" />
                 { this.renderSubmitButton() }
                 { (this.props.triedLogin && !this.props.isLoggedIn) ? (<p className="ui red header">Login failed!</p>) : ""}
+                <Link to="/register" className="header">Don´t have an account? Click here to create one</Link>
             </form>
 
         );

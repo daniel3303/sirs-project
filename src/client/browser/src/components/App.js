@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
 import FilesList from './files/FilesList';
@@ -23,8 +23,9 @@ class App extends React.Component {
     renderLoggedOutRoutes = () => {
         return (
             <React.Fragment>
-                <Route path="/" exact component={Login}/>
                 <Route path="/register" exact component={Register}/>
+                <Route path="/login" exact component={Login}/>
+                <Route path="/" exact component={Login}/>
             </React.Fragment>
         );
     }
@@ -32,8 +33,9 @@ class App extends React.Component {
     renderLoggedInRoutes = () => {
         return (
             <React.Fragment>
-                <Route path="/" exact component={FilesList}/>
                 <Route path="/files/:id" exact component={FileEdit} />
+                <Route path="/files" exact component={FilesList}/>
+                <Route path="/" exact component={() => <Redirect to="/files" />}/>
             </React.Fragment>
         );
     }

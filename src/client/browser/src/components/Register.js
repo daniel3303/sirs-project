@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { Link, Redirect } from 'react-router-dom';
+
 import { register } from '../actions';
 
 
@@ -32,7 +34,7 @@ class Register extends React.Component{
     };
 
     renderSubmitButton = () =>{
-        if(this.props.checkingLogin === true){
+        if(this.props.checkingRegister === true){
             return <button className="ui button primary"><i className="notched circle loading icon button"></i> Creating your account...</button>
         }else{
             return <button className="ui button primary">Register</button>
@@ -41,13 +43,18 @@ class Register extends React.Component{
 
 
     render(){
+        if(this.props.registeredSuccess){
+            return <Redirect to="/" />;
+        }
+
         return (
             <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
                 <Field name="name" component={this.renderInput} label="Name" />
                 <Field name="username" component={this.renderInput} label="Username" />
                 <Field name="password" component={this.renderInput} label="Password" />
                 { this.renderSubmitButton() }
-                { (this.props.triedLogin && !this.props.isLoggedIn) ? (<p className="ui red header">{ this.props.responseMessage }</p>) : ""}
+                { (this.props.registerFailedMessage) ? (<p className="ui red header">{ this.props.registerFailedMessage }</p>) : ""}
+                <Link to="/" className="header">Already have an account? Click here to login</Link>
             </form>
 
         );
@@ -71,9 +78,15 @@ const validate = formValues => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        registeredSuccess: state.auth.registeredSuccess,
+        checkingRegister: state.auth.checkingRegister,
+        registerFailedMessage: state.auth.registerFailedMessage,
+    }
 }
 
-export default connect(null, { register })(reduxForm({
+export default connect(mapStateToProps, { register })(reduxForm({
     form: 'registerForm',
     validate
 })(Register));
