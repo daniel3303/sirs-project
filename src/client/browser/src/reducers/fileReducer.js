@@ -17,7 +17,7 @@ export default (state = {}, action) => {
     case FETCH_FILES:
         return {..._.mapKeys(action.payload, 'id')};
     case FETCH_FILE:
-        return _.merge({}, state, {[action.payload.id]: {...action.payload, changed: false});
+        return _.merge({}, state, {[action.payload.id]: {...action.payload, changed: false}});
     case UPDATE_FILE:
         return _.merge({}, state, {[action.payload.id]: action.payload});
     case CREATE_FILE:
