@@ -57,7 +57,7 @@ class Register extends React.Component{
                     <Field name="password" component={this.renderInput} label="Password" />
                     <div style={{display: "flex", justifyContent: "space-between", alignItems:"center"}}>
                         { this.renderSubmitButton() }
-                        <Link to="/" className="header">Login into your account</Link>
+                        <Link to="/app/" className="header">Login into your account</Link>
                     </div>
                 </form>
                 { (this.props.registerFailedMessage) ? (<p className="ui red header">{ this.props.registerFailedMessage }</p>) : ""}

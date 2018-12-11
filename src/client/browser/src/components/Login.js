@@ -52,7 +52,7 @@ class Login extends React.Component{
                         <Field name="password" component={this.renderInput} label="Password" />
                         <div style={{display: "flex", justifyContent: "space-between", alignItems:"center"}}>
                         <div>{ this.renderSubmitButton() }</div>
-                        <div><Link to="/register" className="header">Create a new account</Link></div>
+                        <div><Link to="/app/register" className="header">Create a new account</Link></div>
                         </div>
                     </form>
                     { (this.props.triedLogin && !this.props.isLoggedIn) ? (<p className="ui red header">Login failed!</p>) : ""}

@@ -14,7 +14,7 @@ class UserHeaderMenu extends React.Component{
         if(this.props.isLoggedIn){
             return (
                 <div className="item" style={{display: "flex", alignItems: "center", height:"100%"}}>
-                    <img className="ui mini circular image" src="/avatar.png" />
+                    <img className="ui mini circular image" src="/app/avatar.png" />
                     <div className="content" style={{marginLeft:"10px"}}>
                       <div className="ui sub header">{this.props.name}</div>
                       <span style={{cursor:"pointer"}} onClick={this.onLogoutClick}>Logout</span>
@@ -24,13 +24,13 @@ class UserHeaderMenu extends React.Component{
         }else{
             return (
                 <div className="item" style={{display: "flex", alignItems: "center", height:"100%"}}>
-                    <Link to="/">
+                    <Link to="/app/">
                         <button className="ui secondary button">
                             <i className="icon users"></i>
                             Login
                         </button>
                     </Link>
-                    <Link to="/register">
+                    <Link to="/app/register">
                         <button className="ui secondary button">
                         <i className="icon wpforms"></i>
                             Register

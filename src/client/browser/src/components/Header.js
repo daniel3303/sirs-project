@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <div className="ui secondary pointing menu" style={{backgroundColor:"#cacaca"}}>
         <div className="item" style={{display:"flex", alignItems:"center", height:"100%"}}>
-            <Link to="/" style={{fontSize: "24px", color:"black"}}>
+            <Link to="/app/" style={{fontSize: "24px", color:"black"}}>
                 SIRS@A47
             </Link>
         </div>
