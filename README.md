@@ -1,8 +1,8 @@
-# SIRS PROJECT - A43 - Remote document access
-SIRS Project - GROUP A43
+# SIRS Project - A43 - Remote document access
 
 In this repository we include our CA, OpenSSL configurations and self-signed certificates for localhost.
-The key to decrypt our db-key.pem RSA private key is: `@!Sa#XA&4A7PJF`
+Our private key is stored in a Vault and the password to decrypt it is asked once you run the server.
+The default password for the Vault is: `@!Sa#XA&4A7PJF`
 
 
 # Depencencies
