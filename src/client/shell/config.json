@@ -1,5 +1,5 @@
 {
-  "address": "http://localhost",
+  "address": "https://localhost",
   "port": 8000,
-  "cert": "../../server/cert.pem"
+  "cert": "../../ca-certificate.crt"
 }
