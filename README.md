@@ -35,7 +35,7 @@ $ python3 manage.py migrate --database=replica2
 $ python3 manage.py collectstatic
 ```
 
-or optionally:
+or optionally use the following script to install all the dependencies and the software in one command:
 
 ``` ssh
 $ ./install.sh
