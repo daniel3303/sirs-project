@@ -17,6 +17,15 @@ The key to decrypt our db-key.pem RSA private key is: `@!Sa#XA&4A7PJF`
 
 
 # Installation
+To install the software dependencies execute the following commands:
+``` ssh
+$ pip3 install requests
+$ pip3 install django
+$ pip3 install django[argon2]
+$ pip3 install django-sslserver
+$ pip3 install cryptography
+```
+
 To install the software execute the following commands (you must be in the folder src):
 ``` ssh
 $ python3 manage.py makemigrations
