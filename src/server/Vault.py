@@ -1,11 +1,24 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
+from server.Logger import ConsoleLogger
 
 #FIXME clear memory on exit
 class Vault:
     certificate = None
     privateKey = None
+    password = None
+
+    @staticmethod
+    def load():
+        logger = ConsoleLogger()
+        if(Vault.password is None):
+            print("Type the password to decrypt the server key.")
+            print("For more information about this you can read the README.md file.")
+            print("If you type a wrong password the program will continue running but it won´t be able to decrypt any data.")
+            logger.warning("The default password is: 8M@!Sa#XA&4A7PJF (we are printing it here just to save some time, we wouldn´t do this on a production enviroment)")
+            print("Password:")
+            Vault.password = input().encode("ASCII")
 
     @staticmethod
     def getPublicKey():
@@ -27,7 +40,7 @@ class Vault:
             with open("certificates/db-key.pem", "rb") as privateKeyFile:
                 Vault.privateKey = serialization.load_pem_private_key(
                     privateKeyFile.read(),
-                    password=b"8M@!Sa#XA&4A7PJF", #FIXME dynamically ask
+                    password=Vault.password,
                     backend=default_backend()
                 )
                 return Vault.privateKey
