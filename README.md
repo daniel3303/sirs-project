@@ -58,6 +58,8 @@ or equivalently you may run the following script:
 $ ./run.sh
 ```
 
+Once you run the server it will ask you for a key to decrypt the `Vault` where our private keys are stored. The default password is `@!Sa#XA&4A7PJF`. If you type in a wrong password the server will continue running but it won´t be able to decrypt any files and because of that it will assume that they are corrupted.
+
 
 The webapp will be available at https://localhost:8000/app/index.html (you must include the index.html part).
 
