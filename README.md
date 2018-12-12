@@ -47,12 +47,12 @@ The command `$ python3 manager.py migrate --database=<replica_name>` must be app
 
 
 # How to run
-To run the software execute the following commands:
+To run the software execute the following command:
 ``` ssh
 $ python3 manage.py runsslserver --certificate certificates/https-cert.pem --key certificates/https-key.pem --noreload
 ```
 
-or optionally:
+or equivalently you may run the following script:
 
 ``` ssh
 $ ./run.sh
