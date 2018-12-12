@@ -26,7 +26,7 @@ $ pip3 install django-sslserver
 $ pip3 install cryptography
 ```
 
-To install the software execute the following commands (you must be in the folder src):
+After installing the dependencies you need to install the software. To do so execute the following commands (you must be in the folder src):
 ``` ssh
 $ python3 manage.py makemigrations
 $ python3 manage.py migrate
