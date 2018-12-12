@@ -1,7 +1,9 @@
 # SIRS Project - A43 - Remote document access
 
 In this repository we include our CA, OpenSSL configurations and self-signed certificates for localhost.
+
 Our private key is stored in a Vault and the password to decrypt it is asked once you run the server.
+
 The default password for the Vault is: `@!Sa#XA&4A7PJF`
 
 
