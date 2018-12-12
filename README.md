@@ -1,4 +1,4 @@
-# sirs-project
+# SIRS PROJECT - A43 - Remote document access
 SIRS Project - GROUP A43
 
 In this repository we include our CA, OpenSSL configurations and self-signed certificates for localhost.
