@@ -2,6 +2,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
 from server.Logger import ConsoleLogger
+import getpass
 
 #FIXME clear memory on exit
 class Vault:
@@ -13,12 +14,11 @@ class Vault:
     def load():
         logger = ConsoleLogger()
         if(Vault.password is None):
-            print("Type the password to decrypt the server key.")
+            print("Type the password to decrypt the RSA server key.")
             print("For more information about this you can read the README.md file.")
             print("If you type a wrong password the program will continue running but it won´t be able to decrypt any data.")
             logger.warning("The default password is: 8M@!Sa#XA&4A7PJF (we are printing it here just to save some time, we wouldn´t do this on a production enviroment)")
-            print("Password:")
-            Vault.password = input().encode("ASCII")
+            Vault.password = getpass.getpass(prompt="RSA key decryption password:").encode("ASCII")
 
     @staticmethod
     def getPublicKey():
