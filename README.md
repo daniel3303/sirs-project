@@ -42,8 +42,8 @@ $ ./install.sh
 ```
 
 
-## Note:
-The command `$ python3 manager.py migrate --database=<replica_name>` must be applied to each replica configured.
+## Quick note:
+If you want to configure extra replicas (probably you don´t want this) you need to execute the command `$ python3 manager.py migrate --database=<replica_name>` for each additional replica.
 
 
 # How to run
